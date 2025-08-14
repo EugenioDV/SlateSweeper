@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "SlateSweeper",
+	"Description": "A Minesweeper experience written in Slate, running inside a UE5 editor tab!",
+	"Category": "Other",
+	"CreatedBy": "Eugenio Del Vecchio",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": false,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "SlateSweeperEditor",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
+		}
+	]
+}
