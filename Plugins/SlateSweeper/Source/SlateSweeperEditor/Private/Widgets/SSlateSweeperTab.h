@@ -6,5 +6,11 @@
 
 class SSlateSweeperTab : public SDockTab
 {
+public:
 	
+	SLATE_BEGIN_ARGS(SSlateSweeperTab)
+	{}
+	SLATE_END_ARGS()
+
+	void Construct(const FArguments& InArgs);	
 };

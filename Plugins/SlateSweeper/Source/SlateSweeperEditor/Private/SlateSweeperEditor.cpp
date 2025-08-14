@@ -3,7 +3,7 @@
 #include "SlateSweeperEditor.h"
 #include "SlateSweeperStyle.h"
 #include "SlateSweeperCommands.h"
-#include "SlateSweeperTab.h"
+#include "Widgets/SSlateSweeperTab.h"
 #include "Misc/MessageDialog.h"
 #include "ToolMenus.h"
 
@@ -56,14 +56,7 @@ void FSlateSweeperEditor::OpenSlateSweeperWindow()
 
 TSharedRef<SDockTab> FSlateSweeperEditor::SpawnSlateSweeperWindow(const class FSpawnTabArgs& SpawnTabArgs)
 {
-	return SNew(SDockTab)
-		.TabRole(ETabRole::NomadTab)
-		[
-			// Put your tab content here! todo
-			SNew(SBox)
-			.HAlign(HAlign_Center)
-			.VAlign(VAlign_Center)
-		];
+	return SNew(SSlateSweeperTab);
 }
 
 void FSlateSweeperEditor::RegisterMenus()
@@ -76,7 +69,7 @@ void FSlateSweeperEditor::RegisterMenus()
 		{
 			FToolMenuSection& Section = ToolbarMenu->FindOrAddSection("PluginTools");
 			{
-				FToolMenuEntry& Entry = Section.AddEntry(FToolMenuEntry::InitToolBarButton(FSlateSweeperCommands::Get().OpenMinesweeperWindow));
+				FToolMenuEntry& Entry = Section.AddEntry(FToolMenuEntry::InitToolBarButton(FSlateSweeperCommands::Get().OpenSlateSweeperWindow));
 				Entry.SetCommandList(PluginCommands);
 			}
 		}
