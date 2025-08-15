@@ -21,6 +21,8 @@ public class SlateSweeperEditor : ModuleRules
 			new string[]
 			{
 				"Projects",
+				"DeveloperSettings",
+				"Settings",
 				"InputCore",
 				"EditorFramework",
 				"UnrealEd",

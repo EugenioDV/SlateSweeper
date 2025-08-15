@@ -8,18 +8,23 @@
 
 class SSlateSweeperMinefield : public SBox //todo figure out if sbox is the best, sstackablebox seems like best but it's actually hard, sboxpanel is what vertical and horizontal boxes are derived from so perhaps I could use that
 {
+	friend class FSlateSweeperGameController;
 public:
 	
 	SLATE_BEGIN_ARGS(SSlateSweeperMinefield)
 	{}
-	SLATE_ARGUMENT(class FSlateSweeperGame*, Controller) //todo verify if I can force a reference to controller to be created somehow
+	SLATE_ARGUMENT(class FSlateSweeperGameController*, Controller) //todo verify if I can force a reference to controller to be created somehow
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs);
+	
 
 private:
 
+	void Redraw();
+	TSharedRef<SWidget> CraftGridCellButton(int32 InCellIndex) const;
+	TSharedPtr<class SUniformGridPanel> GridPanel;
 	// In this architecture, the controller mustn't ever die if the view is alive and vide versa
 	// Would love to use TSharedRef but it would be hard to handle the Construct pattern
-	class FSlateSweeperGame* Controller = nullptr; //todo fix this mess
+	class FSlateSweeperGameController* Controller = nullptr; //todo fix this mess
 };

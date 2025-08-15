@@ -3,7 +3,7 @@
 #include "SlateSweeperEditor.h"
 #include "SlateSweeperStyle.h"
 #include "SlateSweeperCommands.h"
-#include "SlateSweeperGame.h"
+#include "SlateSweeperGameController.h"
 #include "Widgets/SSlateSweeperTab.h"
 #include "Misc/MessageDialog.h"
 #include "ToolMenus.h"
@@ -30,7 +30,7 @@ void FSlateSweeperEditor::StartupModule()
 
 	UToolMenus::RegisterStartupCallback(FSimpleMulticastDelegate::FDelegate::CreateRaw(this, &FSlateSweeperEditor::RegisterMenus));
 
-	FGlobalTabmanager::Get()->RegisterNomadTabSpawner(SlateSweeperTabName, FOnSpawnTab::CreateStatic(&FSlateSweeperEditor::SpawnSlateSweeperWindow))
+	FGlobalTabmanager::Get()->RegisterNomadTabSpawner(SlateSweeperTabName, FOnSpawnTab::CreateRaw(this, &FSlateSweeperEditor::SpawnSlateSweeperWindow))
 	.SetDisplayName(LOCTEXT("FSlateSweeperTabTitle", "SlateSweeper"))
 	.SetMenuType(ETabSpawnerMenuType::Hidden);
 	
@@ -57,14 +57,19 @@ void FSlateSweeperEditor::OpenSlateSweeperWindow()
 
 TSharedRef<SDockTab> FSlateSweeperEditor::SpawnSlateSweeperWindow(const class FSpawnTabArgs& SpawnTabArgs)
 {
-	return SNew(SSlateSweeperTab);
+	return SNew(SSlateSweeperTab).Module(this);
 }
 
-TWeakPtr<FSlateSweeperGame, ESPMode::ThreadSafe> FSlateSweeperEditor::StartNewGame(uint8 GameMineGridWidth, uint8 GameMineGridHeight,
+TWeakPtr<FSlateSweeperGameController, ESPMode::ThreadSafe> FSlateSweeperEditor::StartNewGame(uint8 GameMineGridWidth, uint8 GameMineGridHeight,
 	int32 GameTotalMines)
 {
-	Game = MakeShared<FSlateSweeperGame>(GameMineGridWidth, GameMineGridHeight, GameTotalMines);
-	return Game.ToWeakPtr();
+	CurrentGame = MakeShared<FSlateSweeperGameController>(GameMineGridWidth, GameMineGridHeight, GameTotalMines);
+	return CurrentGame.ToWeakPtr();
+}
+
+TWeakPtr<class FSlateSweeperGameController, ESPMode::ThreadSafe> FSlateSweeperEditor::GetCurrentGameController()
+{
+	return CurrentGame;
 }
 
 void FSlateSweeperEditor::RegisterMenus()

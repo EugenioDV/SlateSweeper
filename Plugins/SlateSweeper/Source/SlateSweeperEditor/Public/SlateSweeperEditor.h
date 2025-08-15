@@ -31,15 +31,16 @@ public:
 	/** This function will be bound to Command. */
 	static void OpenSlateSweeperWindow();
 
-	static TSharedRef<class SDockTab> SpawnSlateSweeperWindow(const class FSpawnTabArgs& SpawnTabArgs);
-	TWeakPtr<class FSlateSweeperGame,  ESPMode::ThreadSafe> StartNewGame(uint8 GameMineGridWidth, uint8 GameMineGridHeight, int32 GameTotalMines);
+	TSharedRef<class SDockTab> SpawnSlateSweeperWindow(const class FSpawnTabArgs& SpawnTabArgs);
+	TWeakPtr<class FSlateSweeperGameController,  ESPMode::ThreadSafe> StartNewGame(uint8 GameMineGridWidth, uint8 GameMineGridHeight, int32 GameTotalMines);
+	
+	TWeakPtr<class FSlateSweeperGameController,  ESPMode::ThreadSafe> GetCurrentGameController();
 private:
 	void RegisterMenus();
-
 
 private:
 	TSharedPtr<class FUICommandList> PluginCommands;
 	
 	//While this is the sole "strong" reference to this resource, there is no way to use UniquePtr without risk of dangling pointers
-	TSharedPtr<class FSlateSweeperGame,  ESPMode::ThreadSafe> Game;
+	TSharedPtr<class FSlateSweeperGameController,  ESPMode::ThreadSafe> CurrentGame;
 };

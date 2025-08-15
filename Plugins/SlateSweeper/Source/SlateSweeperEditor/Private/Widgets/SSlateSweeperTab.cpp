@@ -3,7 +3,8 @@
 #include "SSlateSweeperTab.h"
 
 #include "SlateSweeperEditor.h"
-#include "SlateSweeperGame.h"
+#include "SlateSweeperGameController.h"
+#include "SlateSweeperSettings.h"
 #include "Widgets/Input/SSpinBox.h"
 #include "SSlateSweeperMinefield.h"
 #include "Widgets/Layout/SScaleBox.h"
@@ -46,9 +47,16 @@ TSharedRef<SHorizontalBox> ConstructTabRow(const TSharedRef<SWidget>& LeftWidget
 
 void SSlateSweeperTab::Construct(const FArguments& InArgs)
 {
-	FSlateSweeperEditor& Module = FModuleManager::Get().LoadModuleChecked<FSlateSweeperEditor>("SlateSweeperEditor");
-	auto meow = Module.StartNewGame(10, 10, 20);
-	
+	SlateSweeperModule = InArgs._Module;
+	USlateSweeperGameSettings* GameSettings = GetMutableDefault<USlateSweeperGameSettings>();
+	const USlateSweeperSettings* GeneralSettings = GetDefault<USlateSweeperSettings>();
+
+	if (!IsValid(GameSettings) || !IsValid(GeneralSettings) || !SlateSweeperModule)
+	{
+		//todo throw error
+		return;
+	}
+
 	SDockTab::Construct(
 		SDockTab::FArguments()
 		.TabRole(ETabRole::NomadTab) //todo not sure if tab role should be hardcoded here since stuff is quite scattered
@@ -74,6 +82,25 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 					.HAlign(HAlign_Left)
 					[
 						SNew(SSpinBox<uint8>)
+						.MinValue(GeneralSettings->MinGridWidth)
+						.MaxValue(GeneralSettings->MaxGridWidth)
+						.Value(GameSettings->GridWidth)
+						.OnValueCommitted_Lambda([GameSettings, GeneralSettings](uint8 NewValue, ETextCommit::Type CommitType)
+						{
+							GameSettings->GridWidth = NewValue;
+							GameSettings->GridHeight = NewValue;
+							
+							//todo should we bind an actual function here? idk 
+							// Since the number of bombs can't be greater than
+							GameSettings->TotalMines = FMath::Clamp
+							(
+							GameSettings->TotalMines,
+							GeneralSettings->GetMinAllowedMines(GameSettings->GridWidth, GameSettings->GridHeight),
+							GeneralSettings->GetMaxAllowedMines(GameSettings->GridWidth, GameSettings->GridHeight)
+							);
+														
+							GameSettings->SaveConfig();
+						})
 					]
 					+SHorizontalBox::Slot()
 					.HAlign(HAlign_Left)
@@ -86,6 +113,24 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 					.HAlign(HAlign_Left)
 					[
 						SNew(SSpinBox<uint8>)
+						.MinValue(GeneralSettings->MinGridHeight)
+						.MaxValue(GeneralSettings->MaxGridHeight)
+						.Value(GameSettings->GridHeight)
+						.OnValueCommitted_Lambda([GameSettings, GeneralSettings](uint8 NewValue, ETextCommit::Type CommitType)
+						{
+							GameSettings->GridHeight = NewValue;
+							
+							//todo should we bind an actual function here? idk 
+							// Since the number of bombs can't be greater than
+							GameSettings->TotalMines = FMath::Clamp
+							(
+							GameSettings->TotalMines,
+							GeneralSettings->GetMinAllowedMines(GameSettings->GridWidth, GameSettings->GridHeight),
+							GeneralSettings->GetMaxAllowedMines(GameSettings->GridWidth, GameSettings->GridHeight)
+							);
+							
+							GameSettings->SaveConfig();
+						})
 					]
 				)
 			]
@@ -95,9 +140,31 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 			[
 				ConstructTabRow
 				(
-					SNew(STextBlock)
+			SNew(STextBlock)
 					.Text(LOCTEXT("NumberOfMines", "Number of Mines")),
-					SNew(SSpinBox<int32>)
+					//uint16 is nice but since we are enforcing min max it can only get in the way
+			SNew(SSpinBox<int32>) // Unfortunately this one needs to be very reactive as we can change the grid size after changing the number of mines
+					.MinValue_Lambda([GameSettings, GeneralSettings]
+					{
+						return GeneralSettings->GetMinAllowedMines(GameSettings->GridWidth, GameSettings->GridHeight);
+					})
+					.MaxValue_Lambda([GameSettings, GeneralSettings]
+					{
+						return GeneralSettings->GetMaxAllowedMines(GameSettings->GridWidth, GameSettings->GridHeight);
+					})
+					.Value_Lambda([GameSettings]
+					{
+						return GameSettings->TotalMines;
+					})
+					.OnValueChanged_Lambda([GameSettings](int32 NewValue)
+					{
+						GameSettings->TotalMines = NewValue;
+					})
+					.OnValueCommitted_Lambda([GameSettings](int32 NewValue, ETextCommit::Type CommitType)
+					{
+						GameSettings->TotalMines = NewValue;
+						GameSettings->SaveConfig();
+					})
 				)
 			]
 			+SVerticalBox::Slot()
@@ -107,6 +174,11 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 			[
 				SNew(SButton)
 				.Text(LOCTEXT("Start New Session", "Start New Session"))
+				.OnPressed_Lambda([this]
+				{
+					OnStartGamePressed();
+				})
+				//.OnPressed() //todo this is just test code
 			]
 			+SVerticalBox::Slot()
 			.VAlign(VAlign_Top)
@@ -115,10 +187,38 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 				SNew(SScaleBox)
 				.Stretch(EStretch::ScaleToFit)
 				[
-					meow.Pin()->GetSlateSweeperMinefield()
+					SAssignNew(MinefieldContainer, SBox)
 				]
 			]
 		]);
+
+	// Attempt to recover the previous game in case of a closed-reopened tab
+	if (SlateSweeperModule->GetCurrentGameController().IsValid())
+	{
+		CurrentGame = SlateSweeperModule->GetCurrentGameController();
+		MinefieldContainer->SetContent(CurrentGame.Pin()->GetSlateSweeperMinefield());
+	}
+}
+
+void SSlateSweeperTab::OnStartGamePressed()
+{
+	USlateSweeperGameSettings* GameSettings = GetMutableDefault<USlateSweeperGameSettings>();
+	const USlateSweeperSettings* GeneralSettings = GetDefault<USlateSweeperSettings>();
+
+	if (!IsValid(GameSettings) || !IsValid(GeneralSettings) || !SlateSweeperModule || !MinefieldContainer.IsValid())
+	{
+		//todo throw error
+		return;
+	}
+	
+	CurrentGame = SlateSweeperModule->StartNewGame(GameSettings->GridWidth, GameSettings->GridHeight, GameSettings->TotalMines);
+	if (!CurrentGame.IsValid())
+	{
+		//todo throw error
+		return;
+	}
+	
+	MinefieldContainer->SetContent(CurrentGame.Pin()->GetSlateSweeperMinefield());
 }
 
 

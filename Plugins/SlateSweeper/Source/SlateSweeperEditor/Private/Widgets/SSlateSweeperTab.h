@@ -10,7 +10,18 @@ public:
 	
 	SLATE_BEGIN_ARGS(SSlateSweeperTab)
 	{}
+	SLATE_ARGUMENT(class FSlateSweeperEditor*, Module)
 	SLATE_END_ARGS()
 
-	void Construct(const FArguments& InArgs);	
+	void Construct(const FArguments& InArgs);
+
+private:
+	// Since the module creates the tab in this architecture,
+	// We can go simple as the module always outlives the tab
+	class FSlateSweeperEditor* SlateSweeperModule = nullptr;
+	
+	TWeakPtr<class FSlateSweeperGameController, ESPMode::ThreadSafe> CurrentGame;
+	
+	TSharedPtr<SBox> MinefieldContainer;
+	void OnStartGamePressed();
 };

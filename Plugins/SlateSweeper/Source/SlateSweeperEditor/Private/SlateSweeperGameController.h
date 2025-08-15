@@ -8,12 +8,13 @@
  * todo check out this comment, rework it and make it nice
  */
 
-class FSlateSweeperGame
+class FSlateSweeperGameController
 {
 public:
-	FSlateSweeperGame(uint8 InMineGridWidth, uint8 InMineGridHeight, int32 InTotalMines); //todo perhaps pack this in game settings? 
+	FSlateSweeperGameController(uint8 InMineGridWidth, uint8 InMineGridHeight, int32 InTotalMines); //todo perhaps pack this in game settings? 
 	const TSharedRef<class SSlateSweeperMinefield>& GetSlateSweeperMinefield() const; //todo should name view?
 	const TSharedRef<class FSlateSweeperGameState>& GetSlateSweeperGameState() const; //todo should name view?
+	void OnCellPressed(int32 CellIndex);
 
 private:
 	TSharedRef<class FSlateSweeperGameState> GameState; //todo sharedptr? todo definitive name is minesweeper or slatesweeper?
