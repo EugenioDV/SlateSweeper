@@ -3,6 +3,7 @@
 #include "SlateSweeperEditor.h"
 #include "SlateSweeperStyle.h"
 #include "SlateSweeperCommands.h"
+#include "SlateSweeperGame.h"
 #include "Widgets/SSlateSweeperTab.h"
 #include "Misc/MessageDialog.h"
 #include "ToolMenus.h"
@@ -57,6 +58,13 @@ void FSlateSweeperEditor::OpenSlateSweeperWindow()
 TSharedRef<SDockTab> FSlateSweeperEditor::SpawnSlateSweeperWindow(const class FSpawnTabArgs& SpawnTabArgs)
 {
 	return SNew(SSlateSweeperTab);
+}
+
+TWeakPtr<FSlateSweeperGame, ESPMode::ThreadSafe> FSlateSweeperEditor::StartNewGame(uint8 GameMineGridWidth, uint8 GameMineGridHeight,
+	int32 GameTotalMines)
+{
+	Game = MakeShared<FSlateSweeperGame>(GameMineGridWidth, GameMineGridHeight, GameTotalMines);
+	return Game.ToWeakPtr();
 }
 
 void FSlateSweeperEditor::RegisterMenus()

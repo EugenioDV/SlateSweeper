@@ -1,6 +1,9 @@
 ﻿// This is a technical test from Eugenio Del Vecchio for Geotech, please do not share.
 
 #include "SSlateSweeperTab.h"
+
+#include "SlateSweeperEditor.h"
+#include "SlateSweeperGame.h"
 #include "Widgets/Input/SSpinBox.h"
 #include "SSlateSweeperMinefield.h"
 #include "Widgets/Layout/SScaleBox.h"
@@ -43,6 +46,9 @@ TSharedRef<SHorizontalBox> ConstructTabRow(const TSharedRef<SWidget>& LeftWidget
 
 void SSlateSweeperTab::Construct(const FArguments& InArgs)
 {
+	FSlateSweeperEditor& Module = FModuleManager::Get().LoadModuleChecked<FSlateSweeperEditor>("SlateSweeperEditor");
+	auto meow = Module.StartNewGame(10, 10, 20);
+	
 	SDockTab::Construct(
 		SDockTab::FArguments()
 		.TabRole(ETabRole::NomadTab) //todo not sure if tab role should be hardcoded here since stuff is quite scattered
@@ -91,7 +97,7 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 				(
 					SNew(STextBlock)
 					.Text(LOCTEXT("NumberOfMines", "Number of Mines")),
-					SNew(SSpinBox<uint8>)
+					SNew(SSpinBox<int32>)
 				)
 			]
 			+SVerticalBox::Slot()
@@ -109,7 +115,7 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 				SNew(SScaleBox)
 				.Stretch(EStretch::ScaleToFit)
 				[
-					SNew(SSlateSweeperMinefield)
+					meow.Pin()->GetSlateSweeperMinefield()
 				]
 			]
 		]);
