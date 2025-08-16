@@ -23,10 +23,10 @@ public:
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs);
-	void Redraw();
+	void Update(const FSlateSweeperViewData& NewData);
 	
 	// We don't want anyone editing the delegate or calling it from outside, but we do want to accept listeners
-	FDelegateHandle AddOnCellPressed(const FOnCellPressed::FDelegate& InDelegate)
+	FDelegateHandle RegisterOnCellPressed(const FOnCellPressed::FDelegate& InDelegate)
 	{
 		return OnCellPressedDelegate.Add(InDelegate);
 	}
@@ -40,6 +40,6 @@ private:
 	TSharedRef<SWidget> CraftGridCellButton(int32 InCellIndex) const;
 	TSharedPtr<class SUniformGridPanel> GridPanel;
 
-	FSlateSweeperViewData ViewData = FSlateSweeperViewData();
+	FSlateSweeperViewData ViewData = FSlateSweeperViewData(); //todo reference to data or brutal copy every time?
 	
 };

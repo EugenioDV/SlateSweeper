@@ -7,8 +7,6 @@ class FSlateSweeperGameState
 public:
 
 	FSlateSweeperGameState(uint8 InMineGridWidth, uint8 InMineGridHeight, int32 InTotalMines); //todo int for total mines?
-
-	 void DeleteMeNonConstMethod(){ RevealedCells = TBitArray<>(); } //todo delete
 	
 	// No need to force inline in current architecture, but if one wants to call this every frame we are covered
 	FORCEINLINE uint8 GetMineGridWidth() const { return FieldGridWidth; }

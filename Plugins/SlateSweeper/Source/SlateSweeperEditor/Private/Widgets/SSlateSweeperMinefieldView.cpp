@@ -86,7 +86,8 @@ void SSlateSweeperMinefieldView::Construct(const FArguments& InArgs) //todo this
 	
 }
 
-void SSlateSweeperMinefieldView::Redraw()
+void SSlateSweeperMinefieldView::Update(const FSlateSweeperViewData& NewData)
 {
 	GridPanel->ClearChildren();
+	Construct(FArguments().ViewData(NewData));
 }
