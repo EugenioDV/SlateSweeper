@@ -7,7 +7,6 @@
 #include "SlateSweeperSettings.h"
 #include "Widgets/Input/SSpinBox.h"
 #include "SSlateSweeperMinefieldView.h"
-#include "Widgets/Layout/SScaleBox.h"
 
 
 #define LOCTEXT_NAMESPACE "FSlateSweeperEditorModule"
@@ -86,10 +85,8 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 						.OnValueCommitted_Lambda([GameSettings, GeneralSettings](uint8 NewValue, ETextCommit::Type CommitType)
 						{
 							GameSettings->GridWidth = NewValue;
-							GameSettings->GridHeight = NewValue;
 							
-							//todo should we bind an actual function here? idk 
-							// Since the number of bombs can't be greater than
+							// Since the number of bombs can't be greater than the number of cells, adjust accordingly
 							GameSettings->TotalMines = FMath::Clamp
 							(
 							GameSettings->TotalMines,
@@ -118,8 +115,7 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 						{
 							GameSettings->GridHeight = NewValue;
 							
-							//todo should we bind an actual function here? idk 
-							// Since the number of bombs can't be greater than
+							// Since the number of bombs can't be greater than the number of cells, adjust accordingly
 							GameSettings->TotalMines = FMath::Clamp
 							(
 							GameSettings->TotalMines,
@@ -169,7 +165,8 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 			+SVerticalBox::Slot()
 			.VAlign(VAlign_Top)
 			.HAlign(HAlign_Left)
-			.AutoHeight()
+			.FillHeight(1.f)
+			.Padding(20.f)
 			[
 				SNew(SButton)
 				.Text(LOCTEXT("StartNewGame", "Start New Game"))
@@ -179,14 +176,10 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 				})
 			]
 			+SVerticalBox::Slot()
-			.VAlign(VAlign_Center)
-			.HAlign(HAlign_Center)
+			.AutoHeight()
 			[
 				SAssignNew(MinefieldContainer, SBox)
-				.MaxAspectRatio(1) //enforce linear scaling for our minefield view
-				.MinAspectRatio(1)
 			]
-			.Padding(10.f)
 		]);
 	
 	// Attempt to recover the previous game in case of a closed-reopened tab

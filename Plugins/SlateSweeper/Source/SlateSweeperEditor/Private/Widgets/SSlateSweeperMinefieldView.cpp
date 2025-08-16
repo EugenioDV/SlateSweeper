@@ -5,7 +5,7 @@
 #include "SlateSweeperEditor.h"
 #include "Widgets/Input/SButton.h"
 #include "Widgets/Layout/SUniformGridPanel.h"
-#include "Widgets/Layout/SScaleBox.h" //todo this doesn't fix anything
+#include "Widgets/Text/STextBlock.h"
 
 TSharedRef<SWidget> SSlateSweeperMinefieldView::CraftGridCellButton(int32 InCellIndex) const
 {
@@ -16,23 +16,39 @@ TSharedRef<SWidget> SSlateSweeperMinefieldView::CraftGridCellButton(int32 InCell
 	 * 3) an exploded bomb (game over!)
 	 * In each case, it's disabled
 	 */
+
+	// While this might look hacky, we are mimicking the style of a disabled button for consistency across our "default look" grid, without having to do heavy style setup
+	const FButtonStyle* BorderButtonCamouflage = &FCoreStyle::Get().GetWidgetStyle<FButtonStyle>("Button");
 	
 	if (ViewData.RevealedCells[InCellIndex])
 	{
-		return SNew(SButton)
-			.IsEnabled(false)
-			.ButtonColorAndOpacity(
-				ViewData.MineCells[InCellIndex]
-					? FSlateColor(FLinearColor::Red)
-					: FSlateColor(FLinearColor::Black)
-			)
-			[
-				SNew(STextBlock)
-				.Text(
-					ViewData.RevealedCellNeighbourCounts[InCellIndex] > 0
-						? FText::AsNumber(ViewData.RevealedCellNeighbourCounts[InCellIndex])
-						: FText::GetEmpty()
+		return SNew(SBorder)
+			.Visibility(EVisibility::HitTestInvisible)
+			.BorderImage(
+				BorderButtonCamouflage
+				? &BorderButtonCamouflage->Disabled
+				: FCoreStyle::Get().GetBrush("WhiteBrush")
 				)
+			.BorderBackgroundColor
+				(
+				ViewData.MineCells[InCellIndex]
+					? FLinearColor::Red
+					: FLinearColor::Black
+				)
+			.VAlign(VAlign_Center)
+			.HAlign(HAlign_Center)
+			[
+				// We only create the text widget if there is a text to display, using the SNullWidget trick
+				ViewData.RevealedCellNeighbourCounts[InCellIndex] > 0
+				? SNew(STextBlock)
+				.Visibility(EVisibility::HitTestInvisible)
+				.Text(FText::AsNumber(ViewData.RevealedCellNeighbourCounts[InCellIndex]))
+				.AutoWrapText(false)
+				.Margin(0.f)
+				.ApplyLineHeightToBottomLine(false)
+				.Justification(ETextJustify::Center)
+				.Clipping(EWidgetClipping::OnDemand)
+				: SNullWidget::NullWidget
 			];
 	}
 
@@ -48,7 +64,7 @@ void SSlateSweeperMinefieldView::Construct(const FArguments& InArgs) //todo this
 {
 	ViewData = InArgs._ViewData;
 
-	if (ViewData.FieldGridWidth == 0 || ViewData.FieldGridHeight == 0)
+	if (ViewData.GridWidth == 0 || ViewData.GridHeight == 0)
 	{
 		UE_LOG(LogSlateSweeper, Error, TEXT("Failed to create Minefield View. Grid size invalid"));
 		return;
@@ -58,11 +74,11 @@ void SSlateSweeperMinefieldView::Construct(const FArguments& InArgs) //todo this
 				.MinDesiredSlotHeight(25.f) //todo standard for cell size? Where should I store style stuff like this?
 				.MinDesiredSlotWidth(25.f);
 
-	for (uint8 Row = 0; Row < ViewData.FieldGridHeight; Row++)
+	for (uint8 Row = 0; Row < ViewData.GridHeight; Row++)
 	{
-		for (uint8 Column = 0; Column < ViewData.FieldGridWidth; Column++)
+		for (uint8 Column = 0; Column < ViewData.GridWidth; Column++)
 		{
-			int32 CellIndex = Row * ViewData.FieldGridWidth + Column;
+			int32 CellIndex = Row * ViewData.GridWidth + Column;
 			
 			GridPanel->AddSlot(Column, Row)
 			[
@@ -70,12 +86,16 @@ void SSlateSweeperMinefieldView::Construct(const FArguments& InArgs) //todo this
 			];
 		}
 	}
-	
+
+	// Don't let the grid stretch, even when dimensions aren't 1:1
+	float AspectRatio = static_cast<float>(ViewData.GridWidth) / ViewData.GridHeight;
 	SBox::Construct(
 		SBox::FArguments()
 		[
 			GridPanel.ToSharedRef() //todo this whole grid panel thing is cringe
 		]
+		.MaxAspectRatio(AspectRatio)
+		.MinAspectRatio(AspectRatio)
 	);
 	
 }

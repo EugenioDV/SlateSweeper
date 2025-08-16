@@ -191,8 +191,8 @@ void FSlateSweeperGameState::RevealCell(int32 CellIndex)
 FSlateSweeperViewData FSlateSweeperGameState::GetViewData() const //todo actually construct view data or return pointers
 {
 	FSlateSweeperViewData ViewData;
-	ViewData.FieldGridWidth = FieldGridWidth;
-	ViewData.FieldGridHeight = FieldGridHeight;
+	ViewData.GridWidth = FieldGridWidth;
+	ViewData.GridHeight = FieldGridHeight;
 	ViewData.MineCells = MineCells;
 	ViewData.RevealedCells = RevealedCells;
 	ViewData.RevealedCellNeighbourCounts = CellNeighbourCounts;
