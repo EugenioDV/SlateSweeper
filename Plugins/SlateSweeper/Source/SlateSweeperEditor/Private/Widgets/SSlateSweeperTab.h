@@ -34,5 +34,5 @@ private:
 	// The "slot" for the game view
  	TSharedPtr<SBox> MinefieldContainer;
 	
-	void OnStartNewGamePressed();
+	void OnStartNewGamePressed(uint8 GridWidth, uint8 GridHeight, int32 TotalMines);
 };

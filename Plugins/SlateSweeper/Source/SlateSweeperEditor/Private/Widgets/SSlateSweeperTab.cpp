@@ -31,13 +31,14 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 		.TabRole(ETabRole::NomadTab)
 		[
 			SNew(SVerticalBox)
-			/*+SVerticalBox::Slot()
+			+SVerticalBox::Slot()
 			.FillHeight(1.f)
 			[
 				SNew(SSlateSweeperMenu)
-			]*/
+				.OnStartGameClicked(this, &SSlateSweeperTab::OnStartNewGamePressed)
+			]
 			+SVerticalBox::Slot()
-			.AutoHeight() //todo verify 
+			.FillHeight(1.f) 
 			[
 				SAssignNew(MinefieldContainer, SBox)
 			]
@@ -51,18 +52,10 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 	}
 }
 
-void SSlateSweeperTab::OnStartNewGamePressed()
+void SSlateSweeperTab::OnStartNewGamePressed(uint8 GridWidth, uint8 GridHeight, int32 TotalMines)
 {
-	USlateSweeperGameSettings* GameSettings = GetMutableDefault<USlateSweeperGameSettings>();
-	const USlateSweeperSettings* GeneralSettings = GetDefault<USlateSweeperSettings>();
-
-	if (!IsValid(GameSettings) || !IsValid(GeneralSettings) || !SlateSweeperModule || !MinefieldContainer.IsValid())
-	{
-		UE_LOG(LogSlateSweeper, Error, TEXT("Failed to start new game. Valid checks failed."));
-		return;
-	}
+	CurrentGame = SlateSweeperModule->StartNewGame(GridWidth, GridHeight, TotalMines);
 	
-	CurrentGame = SlateSweeperModule->StartNewGame(GameSettings->GridWidth, GameSettings->GridHeight, GameSettings->TotalMines);
 	if (!CurrentGame.IsValid())
 	{
 		UE_LOG(LogSlateSweeper, Error, TEXT("Failed to start new game. Valid checks failed."));

@@ -27,6 +27,7 @@ TSharedRef<SHorizontalBox> ConstructTabRow(const TSharedRef<SWidget>& LeftWidget
 
 void SSlateSweeperMenu::Construct(const FArguments& InArgs)
 {
+	OnStartGameClicked = InArgs._OnStartGameClicked;
 	USlateSweeperGameSettings* GameSettings = GetMutableDefault<USlateSweeperGameSettings>();
 	const USlateSweeperSettings* GeneralSettings = GetDefault<USlateSweeperSettings>();
 
@@ -143,9 +144,10 @@ void SSlateSweeperMenu::Construct(const FArguments& InArgs)
 		[
 			SNew(SButton)
 			.Text(LOCTEXT("StartNewGame", "Start New Game"))
-			.OnPressed_Lambda([this]
+			.OnClicked_Lambda([this, GameSettings]
 			{
-				//todo bind this via construct params OnStartNewGamePressed();
+				OnStartGameClicked.ExecuteIfBound(GameSettings->GridWidth, GameSettings->GridHeight, GameSettings->TotalMines);
+				return FReply::Handled();
 			})
 		]
 	];

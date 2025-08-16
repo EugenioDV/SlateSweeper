@@ -23,7 +23,7 @@ DECLARE_LOG_CATEGORY_EXTERN(LogSlateSweeper, Log, All);
  * const ref to shareptr<class>: can't modify the pointer itself, but can modify the object it points to
  * const ref to sharedptr<const class>: can't modify either. Do we want to expose view and state to outside modders?
  * todo desired cell size settings, to be used in grid and padding, cell alignment, color buttons?
- * 
+ * todo all onpressed should turn into onclicked!
  */
 
 class FSlateSweeperEditor  : public IModuleInterface
