@@ -157,43 +157,47 @@ void FloodRevealCells(int32 CellIndex, uint8 GridWidth, uint8 GridHeight, const 
 /* Minesweeper helper functions END */
 
 FSlateSweeperGameState::FSlateSweeperGameState(uint8 InMineGridWidth, uint8 InMineGridHeight, int32 InTotalMines)
-	:FieldGridWidth(InMineGridWidth), FieldGridHeight(InMineGridHeight)
+	: GridData (MakeShared<FSlateSweeperGridData>())
 {
+	
+	GridData->GridWidth = InMineGridWidth;
+	GridData->GridHeight = InMineGridHeight;
+	
 	const int32 TotalCells = InMineGridHeight*InMineGridWidth;
 	
-	RevealedCells.Init(false, TotalCells);
+	GridData->RevealedCells.Init(false, TotalCells);
 	
-	AllocateMines(MineCells, InTotalMines, TotalCells);
-	ComputeMineNeighbourCounts(CellNeighbourCounts, MineCells, InMineGridWidth, InMineGridHeight);
+	AllocateMines(GridData->MineCells, InTotalMines, TotalCells);
+	ComputeMineNeighbourCounts(GridData->CellNeighbourCounts, GridData->MineCells, InMineGridWidth, InMineGridHeight);
 }
 
 void FSlateSweeperGameState::RevealCell(int32 CellIndex)
 {
-	if (!RevealedCells.IsValidIndex(CellIndex) || RevealedCells[CellIndex])
+	if (!GridData->RevealedCells.IsValidIndex(CellIndex) || GridData->RevealedCells[CellIndex])
 	{
 		UE_LOG(LogSlateSweeper, Error, TEXT("Failed to reveal cell. Cell index invalid or already revealed: %d"), CellIndex);
 		return;
 	}
 
 	// Reveal the initial cell
-	RevealedCells[CellIndex] = true;
+	GridData->RevealedCells[CellIndex] = true;
 
 	// If this cell has neighbours, no need to do anything else
-	if (CellNeighbourCounts[CellIndex] > 0 || MineCells[CellIndex])
+	if (GridData->CellNeighbourCounts[CellIndex] > 0)
 	{
 		return;
 	}
 
-	FloodRevealCells(CellIndex, FieldGridWidth, FieldGridHeight, CellNeighbourCounts, RevealedCells);
+	// For this project scope, revealing all cells is enough to end the game when the user picks a mined cell
+	if (GridData->MineCells[CellIndex])
+	{
+		GridData->RevealedCells.Init(true, GridData->GridWidth * GridData->GridHeight);
+	}
+
+	FloodRevealCells(CellIndex, GridData->GridWidth, GridData->GridHeight, GridData->CellNeighbourCounts, GridData->RevealedCells);
 }
 
-FSlateSweeperViewData FSlateSweeperGameState::GetViewData() const //todo actually construct view data or return pointers
+TWeakPtr<const FSlateSweeperGridData> FSlateSweeperGameState::GetGridData() const
 {
-	FSlateSweeperViewData ViewData;
-	ViewData.GridWidth = FieldGridWidth;
-	ViewData.GridHeight = FieldGridHeight;
-	ViewData.MineCells = MineCells;
-	ViewData.RevealedCells = RevealedCells;
-	ViewData.RevealedCellNeighbourCounts = CellNeighbourCounts;
-	return ViewData;
+	return GridData;
 }

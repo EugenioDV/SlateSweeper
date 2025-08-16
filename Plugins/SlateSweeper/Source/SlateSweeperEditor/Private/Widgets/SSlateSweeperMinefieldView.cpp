@@ -9,6 +9,8 @@
 
 TSharedRef<SWidget> SSlateSweeperMinefieldView::CraftGridCell(int32 InCellIndex) const
 {
+	const FSlateSweeperGridData& ViewDataRef = *ViewData.Pin();
+
 	/*
 	 * A Revealed cell can either be:
 	 * 1) a cell showing a number
@@ -21,7 +23,7 @@ TSharedRef<SWidget> SSlateSweeperMinefieldView::CraftGridCell(int32 InCellIndex)
 	// While this might look hacky, we are mimicking the style of a disabled button for consistency across our "default look" grid, without having to do heavy style setup
 	const FButtonStyle* BorderButtonCamouflage = &FCoreStyle::Get().GetWidgetStyle<FButtonStyle>("Button");
 	
-	if (ViewData.RevealedCells[InCellIndex])
+	if (ViewDataRef.RevealedCells[InCellIndex])
 	{
 		return SNew(SBorder)
 			.Visibility(EVisibility::HitTestInvisible)
@@ -32,7 +34,7 @@ TSharedRef<SWidget> SSlateSweeperMinefieldView::CraftGridCell(int32 InCellIndex)
 				)
 			.BorderBackgroundColor
 				(
-				ViewData.MineCells[InCellIndex]
+				ViewDataRef.MineCells[InCellIndex]
 					? FLinearColor::Red
 					: FLinearColor::Black
 				)
@@ -40,10 +42,10 @@ TSharedRef<SWidget> SSlateSweeperMinefieldView::CraftGridCell(int32 InCellIndex)
 			.HAlign(HAlign_Center)
 			[
 				// We only create the text widget if there is a text to display, using the SNullWidget trick
-				ViewData.RevealedCellNeighbourCounts[InCellIndex] > 0
+				ViewDataRef.CellNeighbourCounts[InCellIndex] > 0
 				? SNew(STextBlock)
 				.Visibility(EVisibility::HitTestInvisible)
-				.Text(FText::AsNumber(ViewData.RevealedCellNeighbourCounts[InCellIndex]))
+				.Text(FText::AsNumber(ViewDataRef.CellNeighbourCounts[InCellIndex]))
 				.AutoWrapText(false)
 				.Margin(0.f)
 				.ApplyLineHeightToBottomLine(false)
@@ -63,11 +65,13 @@ TSharedRef<SWidget> SSlateSweeperMinefieldView::CraftGridCell(int32 InCellIndex)
 
 void SSlateSweeperMinefieldView::PopulateGrid()
 {
-	for (uint8 Row = 0; Row < ViewData.GridHeight; Row++)
+	const FSlateSweeperGridData& ViewDataRef = *ViewData.Pin();
+
+	for (uint8 Row = 0; Row < ViewDataRef.GridHeight; Row++)
 	{
-		for (uint8 Column = 0; Column < ViewData.GridWidth; Column++)
+		for (uint8 Column = 0; Column < ViewDataRef.GridWidth; Column++)
 		{
-			int32 CellIndex = Row * ViewData.GridWidth + Column;
+			int32 CellIndex = Row * ViewDataRef.GridWidth + Column;
 			
 			GridPanel->AddSlot(Column, Row)
 			[
@@ -81,7 +85,15 @@ void SSlateSweeperMinefieldView::Construct(const FArguments& InArgs) //todo this
 {
 	ViewData = InArgs._ViewData;
 
-	if (ViewData.GridWidth == 0 || ViewData.GridHeight == 0)
+	if (!ViewData.IsValid())
+	{
+		UE_LOG(LogSlateSweeper, Error, TEXT("Failed to create Minefield View. ViewData invalid"));
+		return;
+	}
+
+	const FSlateSweeperGridData& ViewDataRef = *ViewData.Pin();
+
+	if (ViewDataRef.GridWidth == 0 || ViewDataRef.GridHeight == 0)
 	{
 		UE_LOG(LogSlateSweeper, Error, TEXT("Failed to create Minefield View. Grid size invalid"));
 		return;
@@ -94,7 +106,7 @@ void SSlateSweeperMinefieldView::Construct(const FArguments& InArgs) //todo this
 	PopulateGrid();
 
 	// Don't let the grid stretch, even when dimensions aren't 1:1
-	float AspectRatio = static_cast<float>(ViewData.GridWidth) / ViewData.GridHeight;
+	float AspectRatio = static_cast<float>(ViewDataRef.GridWidth) / ViewDataRef.GridHeight;
 	SBox::Construct(
 		SBox::FArguments()
 		[
@@ -106,10 +118,15 @@ void SSlateSweeperMinefieldView::Construct(const FArguments& InArgs) //todo this
 	
 }
 
-void SSlateSweeperMinefieldView::Update(const FSlateSweeperGridData& NewData)
+void SSlateSweeperMinefieldView::Update(const TWeakPtr<const FSlateSweeperGridData>& NewData)
 {
-	ViewData = NewData;
+	if (!NewData.IsValid())
+	{
+		UE_LOG(LogSlateSweeper, Error, TEXT("Failed to update Minefield View. ViewData invalid"));
+		return;
+	}
 	
+	ViewData = NewData;
 	GridPanel->ClearChildren();
 	PopulateGrid();
 }

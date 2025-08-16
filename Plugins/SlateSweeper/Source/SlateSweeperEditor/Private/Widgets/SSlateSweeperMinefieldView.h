@@ -18,12 +18,12 @@ public:
 	
 	SLATE_BEGIN_ARGS(SSlateSweeperMinefieldView)
 	{}
-	SLATE_ARGUMENT(FSlateSweeperGridData, ViewData)
+	SLATE_ARGUMENT(TWeakPtr<const FSlateSweeperGridData>, ViewData)
 	SLATE_END_ARGS()
 
 	void PopulateGrid();
 	void Construct(const FArguments& InArgs);
-	void Update(const FSlateSweeperGridData& NewData);
+	void Update(const TWeakPtr<const FSlateSweeperGridData>& NewData);
 	
 	// We don't want anyone editing the delegate or calling it from outside, but we do want to accept listeners
 	FDelegateHandle RegisterOnCellPressed(const FOnCellPressed::FDelegate& InDelegate)
@@ -40,6 +40,6 @@ private:
 	TSharedRef<SWidget> CraftGridCell(int32 InCellIndex) const;
 	TSharedPtr<class SUniformGridPanel> GridPanel;
 
-	FSlateSweeperGridData ViewData = FSlateSweeperGridData(); //todo reference to data or brutal copy every time?
+	TWeakPtr<const FSlateSweeperGridData> ViewData;
 	
 };

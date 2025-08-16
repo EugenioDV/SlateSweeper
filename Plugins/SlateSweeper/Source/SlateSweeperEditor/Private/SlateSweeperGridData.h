@@ -11,7 +11,7 @@
 struct FSlateSweeperGridData
 {
 	TBitArray<> RevealedCells;
-	TArray<uint8> RevealedCellNeighbourCounts;
+	TArray<uint8> CellNeighbourCounts;
 	TBitArray<> MineCells;
 	uint8 GridWidth, GridHeight;
 };

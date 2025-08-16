@@ -15,14 +15,14 @@ FSlateSweeperGameController::FSlateSweeperGameController(uint8 InMineGridWidth, 
 void FSlateSweeperGameController::HandleOnCellPressed(int32 CellIndex)
 {
 	GameState->RevealCell(CellIndex);
-	GameView->Update(GameState->GetViewData()); //todo this is a temp solution just to test the game
+	GameView->Update(GameState->GetGridData()); //todo this is a temp solution just to test the game
 }
 
 TWeakPtr<SSlateSweeperMinefieldView> FSlateSweeperGameController::GetOrCreateGameView()
 {
 	if (!GameView.IsValid())
 	{
-		GameView = SNew(SSlateSweeperMinefieldView).ViewData(GameState->GetViewData());
+		GameView = SNew(SSlateSweeperMinefieldView).ViewData(GameState->GetGridData());
 
 		// Lengthy registration but ensures delegate safety 
 		GameView->RegisterOnCellPressed
