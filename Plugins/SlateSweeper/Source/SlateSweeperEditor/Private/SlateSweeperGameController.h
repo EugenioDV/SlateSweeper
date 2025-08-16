@@ -13,7 +13,7 @@ class FSlateSweeperGameController
 public:
 	
 	FSlateSweeperGameController(uint8 InMineGridWidth, uint8 InMineGridHeight, int32 InTotalMines);
-	TWeakPtr<SWidget> GetOrCreateGameView();
+	TWeakPtr<class SSlateSweeperMinefieldView> GetOrCreateGameView();
 	TWeakPtr<class FSlateSweeperGameState> GetSlateSweeperGameState() const;
 	void OnCellPressed(int32 CellIndex);
 

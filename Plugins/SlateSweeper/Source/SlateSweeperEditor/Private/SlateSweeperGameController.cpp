@@ -20,14 +20,14 @@ void FSlateSweeperGameController::OnCellPressed(int32 CellIndex)
 	GameView->Redraw(); //todo this is a temp solution just to test the game
 }
 
-TWeakPtr<SWidget> FSlateSweeperGameController::GetOrCreateGameView()
+TWeakPtr<SSlateSweeperMinefieldView> FSlateSweeperGameController::GetOrCreateGameView()
 {
 	if (!GameView.IsValid())
 	{
 		GameView = SNew(SSlateSweeperMinefieldView).ViewData(GameState->GetViewData());
 	}
 	
-	return GameView->AsWeak();
+	return GameView;
 }
 
 TWeakPtr<FSlateSweeperGameState> FSlateSweeperGameController::GetSlateSweeperGameState() const
