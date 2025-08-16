@@ -5,7 +5,7 @@
 /*
  * This class represents a minesweeper game that is being played
  * In this architecture, it spawns/owns the "view" (a slate widget) and the "model" (state)
- * It is the only gateway to access the view and the model
+ * If we were to implement cooperation with other modules, we'd do it here
  */
 
 class FSlateSweeperGameController

@@ -6,10 +6,9 @@
 
 
 /*
- * Widget for rendering the SlateSweeper grid.
- * Displays cells based on provided view data
- * Responsible only for visuals and user input
- * Currently recreates itself at every turn
+ * Widget for rendering the SlateSweeper grid, similar to the "view" of an MVC pattern
+ * Responsible only for visuals and passing on user input
+ * If we were to implement a new visual aspect of the experience, we'd do it here
  */
 class SSlateSweeperMinefieldView : public SBox
 {

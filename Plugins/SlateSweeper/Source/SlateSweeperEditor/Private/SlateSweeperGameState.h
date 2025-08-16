@@ -3,10 +3,11 @@
 
 #include "SlateSweeperGridData.h"
 
-
-//todo comment state
-// it's as backend as it gets
-// 
+/*
+ * The "state" class for our game a bit similar to the "model" of a MVC pattern
+ * Holds both the data and the functions for modifying the grid
+ * If we were to implement backend functionality, we'd do it here
+ */
 class FSlateSweeperGameState
 {
 public:
