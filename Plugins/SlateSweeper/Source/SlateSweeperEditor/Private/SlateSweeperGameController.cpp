@@ -14,7 +14,7 @@ FSlateSweeperGameController::FSlateSweeperGameController(uint8 InMineGridWidth, 
 
 void FSlateSweeperGameController::HandleOnCellPressed(int32 CellIndex)
 {
-	GameState->PressCell(CellIndex);
+	GameState->RevealCell(CellIndex);
 	GameView->Update(GameState->GetViewData()); //todo this is a temp solution just to test the game
 }
 

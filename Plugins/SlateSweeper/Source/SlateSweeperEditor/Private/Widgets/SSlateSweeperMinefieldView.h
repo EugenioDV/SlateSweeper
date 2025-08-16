@@ -4,7 +4,6 @@
 #include "Widgets/Layout/SBox.h"
 #include "SlateSweeperViewData.h"
 
-
 /*
  * todo describe
  *

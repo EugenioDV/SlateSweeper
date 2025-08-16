@@ -179,18 +179,14 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 				})
 			]
 			+SVerticalBox::Slot()
-			.VAlign(VAlign_Fill)
-			.HAlign(HAlign_Fill)
+			.VAlign(VAlign_Center)
+			.HAlign(HAlign_Center)
 			[
-				SNew(SScaleBox)
-				.Stretch(EStretch::ScaleToFit)
-				.StretchDirection(EStretchDirection::Both)
-				.HAlign(HAlign_Left)
-				.VAlign(VAlign_Top)
-				[
-					SAssignNew(MinefieldContainer, SBox)
-				]
+				SAssignNew(MinefieldContainer, SBox)
+				.MaxAspectRatio(1) //enforce linear scaling for our minefield view
+				.MinAspectRatio(1)
 			]
+			.Padding(10.f)
 		]);
 	
 	// Attempt to recover the previous game in case of a closed-reopened tab

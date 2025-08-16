@@ -5,8 +5,6 @@
 #include "SlateSweeperEditor.h"
 #include "Widgets/Input/SButton.h"
 #include "Widgets/Layout/SUniformGridPanel.h"
-#include "SlateSweeperGameController.h"
-#include "SlateSweeperGameState.h"
 #include "Widgets/Layout/SScaleBox.h" //todo this doesn't fix anything
 
 TSharedRef<SWidget> SSlateSweeperMinefieldView::CraftGridCellButton(int32 InCellIndex) const
@@ -29,16 +27,12 @@ TSharedRef<SWidget> SSlateSweeperMinefieldView::CraftGridCellButton(int32 InCell
 					: FSlateColor(FLinearColor::Black)
 			)
 			[
-				SNew(SScaleBox)
-				.Stretch(EStretch::ScaleToFit)
-				[
-					SNew(STextBlock)
-					.Text(
-						ViewData.RevealedCellNeighbourCounts[InCellIndex] > 0
-							? FText::AsNumber(ViewData.RevealedCellNeighbourCounts[InCellIndex])
-							: FText::GetEmpty()
-					)
-				]
+				SNew(STextBlock)
+				.Text(
+					ViewData.RevealedCellNeighbourCounts[InCellIndex] > 0
+						? FText::AsNumber(ViewData.RevealedCellNeighbourCounts[InCellIndex])
+						: FText::GetEmpty()
+				)
 			];
 	}
 
