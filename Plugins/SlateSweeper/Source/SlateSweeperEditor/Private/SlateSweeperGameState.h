@@ -1,6 +1,7 @@
 ﻿// This is a technical test from Eugenio Del Vecchio for Geotech, please do not share.
-
 #pragma once
+
+#include "SlateSweeperGridData.h"
 
 class FSlateSweeperGameState
 {
@@ -17,9 +18,11 @@ public:
 
 	void RevealCell(int32 CellIndex);
 
-	struct FSlateSweeperViewData GetViewData() const;
+	struct FSlateSweeperGridData GetViewData() const;
 	
 private:
+
+	TSharedRef<FSlateSweeperGridData, ESPMode::ThreadSafe> GridData;
 	
 	uint8 FieldGridWidth, FieldGridHeight;
 	TBitArray<> MineCells;

@@ -5,7 +5,11 @@
 #include "CoreMinimal.h"
 #include "Styling/SlateStyle.h"
 
-// todo low style is not used, should we nuke it?
+/*
+ * The style isn't really used as aesthetics aren't requested for this tech test
+ * We do have a custom icon
+ */
+
 class FSlateSweeperStyle
 {
 public:

@@ -3,12 +3,12 @@
 #pragma once
 
 /*
- * Utility struct for communication between state and view
- * The view does not need to know the whole truth, only what to reveal
- * This can also be the whole truth in case of the game end
+ * This class's sole purpose is for everyone to agree on
+ * What a SlateSweeper grid should look like
+ * Without having to know each other.
  */
 
-struct FSlateSweeperViewData
+struct FSlateSweeperGridData
 {
 	TBitArray<> RevealedCells;
 	TArray<uint8> RevealedCellNeighbourCounts;

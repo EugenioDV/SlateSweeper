@@ -11,7 +11,11 @@ class FMenuBuilder;
 DECLARE_LOG_CATEGORY_EXTERN(LogSlateSweeper, Log, All);
 
 /*
- * todo desc This guy acts as a composition root and lifetime owner (create controller, create tab)
+ * The module acts as a composition root and lifetime owner (create controller, create tab)
+ * The rest is mostly boilerplate code for the toolbar button and so forth
+ */
+
+/* EUGENIO'S TO-DO LIST
  * todo final checks verify it compiles on 5.6
  * todo search // and /* for consistent-looking comments
  * todo check all #includes 

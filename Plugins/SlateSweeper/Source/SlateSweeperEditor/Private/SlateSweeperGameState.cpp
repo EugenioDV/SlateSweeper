@@ -2,7 +2,6 @@
 
 #include "SlateSweeperGameState.h"
 #include "SlateSweeperEditor.h"
-#include "SlateSweeperViewData.h"
 
 /* Minesweeper helper functions START */
 

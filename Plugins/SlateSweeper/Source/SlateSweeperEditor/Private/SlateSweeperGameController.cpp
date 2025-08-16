@@ -33,7 +33,6 @@ TWeakPtr<SSlateSweeperMinefieldView> FSlateSweeperGameController::GetOrCreateGam
 				&FSlateSweeperGameController::HandleOnCellPressed
 			)
 		);
-
 	}
 	
 	return GameView;
