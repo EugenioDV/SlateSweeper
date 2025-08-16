@@ -1,4 +1,5 @@
 ﻿// This is a technical test from Eugenio Del Vecchio for Geotech, please do not share.
+
 #pragma once
 
 #include "SlateSweeperGridData.h"
@@ -8,6 +9,7 @@
  * Holds both the data and the functions for modifying the grid
  * If we were to implement backend functionality, we'd do it here
  */
+
 class FSlateSweeperGameState
 {
 public:

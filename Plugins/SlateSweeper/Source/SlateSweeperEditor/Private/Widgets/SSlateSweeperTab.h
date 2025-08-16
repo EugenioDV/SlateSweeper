@@ -6,7 +6,7 @@
 
 /*
  * Main tab
- *
+ * todo describe this
  *
  * holds settings 
  */
