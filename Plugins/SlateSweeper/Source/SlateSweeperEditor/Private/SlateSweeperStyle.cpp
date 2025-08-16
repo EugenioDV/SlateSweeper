@@ -43,7 +43,7 @@ TSharedRef< FSlateStyleSet > FSlateSweeperStyle::Create()
 	TSharedRef< FSlateStyleSet > Style = MakeShareable(new FSlateStyleSet("SlateSweeperStyle"));
 	Style->SetContentRoot(IPluginManager::Get().FindPlugin("SlateSweeper")->GetBaseDir() / TEXT("Resources"));
 
-	Style->Set("SlateSweeper.PluginAction", new IMAGE_BRUSH_SVG(TEXT("PlaceholderButtonIcon"), Icon20x20));
+	Style->Set("SlateSweeper.OpenSlateSweeperWindow", new IMAGE_BRUSH_SVG(TEXT("OpenPluginWindowIcon"), Icon20x20));
 	return Style;
 }
 
