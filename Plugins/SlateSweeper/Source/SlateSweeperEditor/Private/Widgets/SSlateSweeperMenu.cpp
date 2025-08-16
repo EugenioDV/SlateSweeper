@@ -36,7 +36,6 @@ void SSlateSweeperMenu::Construct(const FArguments& InArgs)
 	ChildSlot
 	[
 		SNew(SVerticalBox)
-
 		+SVerticalBox::Slot()
 		.VAlign(VAlign_Top)
 		.AutoHeight()
@@ -101,10 +100,9 @@ void SSlateSweeperMenu::Construct(const FArguments& InArgs)
 				]
 			)
 		]
-
 		+SVerticalBox::Slot()
 		.VAlign(VAlign_Top)
-		.AutoHeight()
+		.HAlign(HAlign_Left)
 		[
 			ConstructTabRow
 			(

@@ -114,11 +114,16 @@ void SSlateSweeperMinefieldView::Construct(const FArguments& InArgs)
 	float AspectRatio = static_cast<float>(ViewDataRef.GridWidth) /  static_cast<float>(ViewDataRef.GridHeight);
 	SBox::Construct(
 		SBox::FArguments()
-		[
-			GridPanel.ToSharedRef()
-		]
 		.MaxAspectRatio(AspectRatio)
 		.MinAspectRatio(AspectRatio)
+		.VAlign(VAlign_Top)
+		.HAlign(HAlign_Left)
+		[
+			SNew(SBorder)
+			[
+				GridPanel.ToSharedRef()
+			]
+		]
 	);
 	
 }

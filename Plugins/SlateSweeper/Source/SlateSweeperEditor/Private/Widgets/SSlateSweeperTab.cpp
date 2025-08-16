@@ -4,21 +4,9 @@
 
 #include "SlateSweeperEditor.h"
 #include "SlateSweeperGameController.h"
-#include "SlateSweeperSettings.h"
 #include "SSlateSweeperMenu.h"
 #include "SSlateSweeperMinefieldView.h"
 
-/*
- * TODO style start
- * Access editor row width
- * text size
- * highlight color
- * default background color
- * padding values (won't be easy since they use indentation widgets)
- * perhaps a spliter or a drop down thing for the menu so that there is more space for playing when collapsed
- * todo style end
- *
- */
 
 void SSlateSweeperTab::Construct(const FArguments& InArgs)
 {
@@ -32,13 +20,16 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 		[
 			SNew(SVerticalBox)
 			+SVerticalBox::Slot()
-			.FillHeight(1.f)
+			.AutoHeight()
+			.VAlign(VAlign_Top)
 			[
 				SNew(SSlateSweeperMenu)
 				.OnStartGameClicked(this, &SSlateSweeperTab::OnStartNewGamePressed)
 			]
 			+SVerticalBox::Slot()
-			.FillHeight(1.f) 
+			.FillHeight(1.f)
+			.VAlign(VAlign_Top)
+			.HAlign(HAlign_Left)
 			[
 				SAssignNew(MinefieldContainer, SBox)
 			]
