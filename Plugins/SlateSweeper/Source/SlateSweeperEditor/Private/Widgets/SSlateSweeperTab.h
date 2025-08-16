@@ -4,7 +4,8 @@
 
 #include "Widgets/Docking/SDockTab.h"
 
-/* Main tab
+/*
+ * Main tab
  *
  *
  * holds settings 
@@ -22,6 +23,7 @@ public:
 	void Construct(const FArguments& InArgs);
 
 private:
+	
 	// Since the module creates the tab in this architecture,
 	// We don't risk a dangling pointer as the module always outlives the tab
 	class FSlateSweeperEditor* SlateSweeperModule = nullptr;

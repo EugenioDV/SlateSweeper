@@ -2,20 +2,15 @@
 
 #include "SlateSweeperGameController.h"
 #include "SlateSweeperGameState.h"
-#include "Widgets/SSlateSweeperMinefield.h"
+#include "Widgets/SSlateSweeperMinefieldView.h"
 
 
 
 
 FSlateSweeperGameController::FSlateSweeperGameController(uint8 InMineGridWidth, uint8 InMineGridHeight, int32 InTotalMines)
-	:	GameState (MakeShared<FSlateSweeperGameState>(InMineGridWidth, InMineGridHeight, InTotalMines)),
-		GameView(SNew(SSlateSweeperMinefield).Controller(this))
+	:	GameState (MakeShared<FSlateSweeperGameState>(InMineGridWidth, InMineGridHeight, InTotalMines))
 {
-}
-
-const TSharedRef<SSlateSweeperMinefield>& FSlateSweeperGameController::GetSlateSweeperMinefield() const
-{
-	return GameView;
+	//GameView->AddOnCellPressed(FOnCellPressed::FDelegate::CreateSP(this, &FSlateSweeperGameController::HandleCellPressed));
 }
 
 //todo turn this into a delegate architecture
@@ -25,7 +20,17 @@ void FSlateSweeperGameController::OnCellPressed(int32 CellIndex)
 	GameView->Redraw(); //todo this is a temp solution just to test the game
 }
 
-const TSharedRef<class FSlateSweeperGameState>& FSlateSweeperGameController::GetSlateSweeperGameState() const
+TWeakPtr<SWidget> FSlateSweeperGameController::GetOrCreateGameView()
+{
+	if (!GameView.IsValid())
+	{
+		GameView = SNew(SSlateSweeperMinefieldView).ViewData(GameState->GetViewData());
+	}
+	
+	return GameView->AsWeak();
+}
+
+TWeakPtr<FSlateSweeperGameState> FSlateSweeperGameController::GetSlateSweeperGameState() const
 {
 	return GameState;
 }

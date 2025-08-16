@@ -11,14 +11,13 @@ class FMenuBuilder;
 DECLARE_LOG_CATEGORY_EXTERN(LogSlateSweeper, Log, All);
 
 /*
- * This guy acts as a composition root and lifetime owner (create controller, create tab)
- * Todo the tab is not the view, but then what is it? the view is the game itself, the minefield, the tab is like a settings menu that
- * Talks to what? Does it hold the values? Does it matter at this scope?
- *  * todo check all function input to be In or Out and when not to be, use const ref when needed and debate const value
- *			aka IN is used in constructors for values that are taken IN (aka saved), out is used in functions for references to write to, all the rest is without in/pit
-* todo remove all class pre-function input in cpp files
-* todo all that stuff about FORCEINLINE and so on, I never use it =/
-* todo final checks verify it compiles on everything 
+ * todo desc This guy acts as a composition root and lifetime owner (create controller, create tab)
+ * todo final checks verify it compiles on 5.6
+ * todo search // and /* for consistent-looking comments
+ * todo check all #includes 
+ * todo solve the const riddle: interface, friend or superclass pass are all options
+ * const ref to shareptr<class>: can't modify the pointer itself, but can modify the object it points to
+ * const ref to sharedptr<const class>: can't modify either. Do we want to expose view and state to outside modders?
  */
 
 class FSlateSweeperEditor  : public IModuleInterface

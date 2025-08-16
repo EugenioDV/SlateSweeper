@@ -4,18 +4,18 @@
 
 class FSlateSweeperGameState
 {
-	friend class FSlateSweeperGameController; //todo scrutiny this I kinda like it but never used actually not needed
 public:
 
 	FSlateSweeperGameState(uint8 InMineGridWidth, uint8 InMineGridHeight, int32 InTotalMines); //todo int for total mines?
+
+	 void DeleteMeNonConstMethod(){ RevealedCells = TBitArray<>(); } //todo delete
 	
-	FORCEINLINE uint8 GetMineGridWidth() const { return MineGridWidth; }
-	FORCEINLINE uint8 GetMineGridHeight() const { return MineGridHeight; }
+	// No need to force inline in current architecture, but if one wants to call this every frame we are covered
+	FORCEINLINE uint8 GetMineGridWidth() const { return FieldGridWidth; }
+	FORCEINLINE uint8 GetMineGridHeight() const { return FieldGridHeight; }
 	FORCEINLINE const TBitArray<>& GetMineCells() const { return MineCells; }
 	FORCEINLINE const TBitArray<>& GetRevealedCells() const { return RevealedCells; }
 	FORCEINLINE const TArray<uint8>& GetCellNeighbourCounts() const { return CellNeighbourCounts; }
-
-private:
 
 	void PressCell(int32 CellIndex)//todo this is all GPT
 	{
@@ -42,8 +42,8 @@ private:
 			int32 CurrentIndex;
 			CellsToProcess.Dequeue(CurrentIndex);
 
-			const int32 X = CurrentIndex % MineGridWidth;
-			const int32 Y = CurrentIndex / MineGridWidth;
+			const int32 X = CurrentIndex % FieldGridWidth;
+			const int32 Y = CurrentIndex / FieldGridWidth;
 
 			// Check all 8 neighbours
 			for (int32 dy = -1; dy <= 1; ++dy)
@@ -59,12 +59,12 @@ private:
 					const int32 NY = Y + dy;
 
 					// Bounds check
-					if (NX < 0 || NX >= MineGridWidth || NY < 0 || NY >= MineGridHeight)
+					if (NX < 0 || NX >= FieldGridWidth || NY < 0 || NY >= FieldGridHeight)
 					{
 						continue;
 					}
 
-					const int32 NeighbourIndex = NY * MineGridWidth + NX;
+					const int32 NeighbourIndex = NY * FieldGridWidth + NX;
 
 					// Skip if already revealed or is a mine
 					if (RevealedCells[NeighbourIndex] || MineCells[NeighbourIndex])
@@ -84,9 +84,12 @@ private:
 			}
 		}
 	}
+
+	struct FSlateSweeperViewData GetViewData() const;
 	
-	//todo maybe to a struct to separate game settings that don't change between turns from those who do, and also separate things nicely?
-	uint8 MineGridWidth, MineGridHeight;
+private:
+	
+	uint8 FieldGridWidth, FieldGridHeight;
 	TBitArray<> MineCells;
 	TBitArray<> RevealedCells;
 	TArray<uint8> CellNeighbourCounts;

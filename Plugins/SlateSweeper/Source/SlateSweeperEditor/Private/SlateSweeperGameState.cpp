@@ -2,6 +2,8 @@
 
 #include "SlateSweeperGameState.h"
 #include "SlateSweeperEditor.h"
+#include "SlateSweeperViewData.h"
+
 
 void AllocateMines(TBitArray<>& OutBombCells, int32 TotalMines, int32 TotalCells)
 {
@@ -73,7 +75,7 @@ void ComputeBombNeighbourCounts(TArray<uint8>& OutCellNeighbourCounts, const TBi
 }
 
 FSlateSweeperGameState::FSlateSweeperGameState(uint8 InMineGridWidth, uint8 InMineGridHeight, int32 InTotalMines)
-	:MineGridWidth(InMineGridWidth), MineGridHeight(InMineGridHeight)
+	:FieldGridWidth(InMineGridWidth), FieldGridHeight(InMineGridHeight)
 {
 	const int32 TotalCells = InMineGridHeight*InMineGridWidth;
 	
@@ -81,4 +83,15 @@ FSlateSweeperGameState::FSlateSweeperGameState(uint8 InMineGridWidth, uint8 InMi
 	
 	AllocateMines(MineCells, InTotalMines, TotalCells);
 	ComputeBombNeighbourCounts(CellNeighbourCounts, MineCells, InMineGridWidth, InMineGridHeight);
+}
+
+FSlateSweeperViewData FSlateSweeperGameState::GetViewData() const //todo actually construct view data or return pointers
+{
+	FSlateSweeperViewData ViewData;
+	ViewData.FieldGridWidth = FieldGridWidth;
+	ViewData.FieldGridHeight = FieldGridHeight;
+	ViewData.MineCells = MineCells;
+	ViewData.RevealedCells = RevealedCells;
+	ViewData.RevealedCellNeighbourCounts = CellNeighbourCounts;
+	return ViewData;
 }

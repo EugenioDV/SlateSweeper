@@ -6,10 +6,12 @@
 #include "Engine/DeveloperSettings.h"
 #include "SlateSweeperSettings.generated.h"
 
-/* Settings for a single SlateSweeper game
- * Tiny utility to store mine grid values that persists across editor instances
- * I just like the idea of the user going back to the settings they like to play
-*/
+/*
+ * Settings for starting a single SlateSweeper game
+ * Stores mine grid values and persists across editor instances
+ * I like the idea of the user going back to the settings they like to play
+ */
+
 UCLASS(config=EditorPerProjectUserSettings)
 class USlateSweeperGameSettings : public UDeveloperSettings
 {
@@ -21,17 +23,18 @@ public:
 };
 
 
-/** todo this is all AI generated, review
+/*
  * Editor-only settings for Slate Sweeper.
- * Visible under Editor Preferences in the Unreal Editor.
+ * Regulates maximum grid size, cell/mine ratio and so forth
+ * Visible in the editor settings like any other plugin settings.
  */
+
 UCLASS(config=Editor, defaultconfig, meta = (DisplayName="Slate Sweeper Editor Settings"))
 class USlateSweeperSettings : public UDeveloperSettings
 {
 	GENERATED_BODY()
 
 public:
-	// ----- Grid Limits -----
 	UPROPERTY(EditAnywhere, config, Category="Grid Limits", meta = (ClampMin="4", ClampMax="100"))
 	uint8 MinGridWidth = 4;
 
@@ -69,13 +72,12 @@ public:
 		}
 	}
 
-	// Calculates max mines allowed based on current grid todo idk if I should actually enforce a mine ratio
+	// Allowed mines are just hard limits for now, so we can test the boundaries of the system
 	int32 GetMinAllowedMines(int32 GridWidth, int32 GridHeight) const
 	{
 		return 0;
 	}
 	
-	// Calculates max mines allowed based on current grid todo idk if I should actually enforce a mine ratio
 	int32 GetMaxAllowedMines(int32 GridWidth, int32 GridHeight) const
 	{
 		return GridWidth * GridHeight;

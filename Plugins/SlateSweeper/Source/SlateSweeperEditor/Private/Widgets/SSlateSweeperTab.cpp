@@ -6,24 +6,22 @@
 #include "SlateSweeperGameController.h"
 #include "SlateSweeperSettings.h"
 #include "Widgets/Input/SSpinBox.h"
-#include "SSlateSweeperMinefield.h"
+#include "SSlateSweeperMinefieldView.h"
 #include "Widgets/Layout/SScaleBox.h"
 
 
 #define LOCTEXT_NAMESPACE "FSlateSweeperEditorModule"
 
 
-//TODO style
 /*
- *Access editor row width
- *text size
- *highlight color
- *default background color
- *padding values (won't be easy since they use indentation widgets)
- *perhaps a spliter or a drop down thing for the menu so that there is more space for playing when collapsed
- * check if they do the separation thing in ndisplay widgets aka SNew( SBox ) instead of SNew(SBox)
- *
- *
+ * TODO style start
+ * Access editor row width
+ * text size
+ * highlight color
+ * default background color
+ * padding values (won't be easy since they use indentation widgets)
+ * perhaps a spliter or a drop down thing for the menu so that there is more space for playing when collapsed
+ * todo style end
  *
  */
 
@@ -142,8 +140,9 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 				(
 			SNew(STextBlock)
 					.Text(LOCTEXT("NumberOfMines", "Number of Mines")),
-					//uint16 is nice but since we are enforcing min max it can only get in the way
-			SNew(SSpinBox<int32>) // Unfortunately this one needs to be very reactive as we can change the grid size after changing the number of mines
+					// uint16 would be nice here, but since we are already enforcing min/max, it can only get in the way
+					// This one needs to be very reactive as we can change the grid size after changing the number of mines
+			SNew(SSpinBox<int32>)
 					.MinValue_Lambda([GameSettings, GeneralSettings]
 					{
 						return GeneralSettings->GetMinAllowedMines(GameSettings->GridWidth, GameSettings->GridHeight);
@@ -198,7 +197,7 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 	CurrentGame = SlateSweeperModule->GetCurrentGameController();
 	if (CurrentGame.IsValid())
 	{
-		MinefieldContainer->SetContent(CurrentGame.Pin()->GetSlateSweeperMinefield());
+		MinefieldContainer->SetContent(CurrentGame.Pin()->GetOrCreateGameView().Pin().ToSharedRef());
 	}
 }
 
@@ -220,7 +219,7 @@ void SSlateSweeperTab::OnStartNewGamePressed()
 		return;
 	}
 	
-	MinefieldContainer->SetContent(CurrentGame.Pin()->GetSlateSweeperMinefield());
+	MinefieldContainer->SetContent(CurrentGame.Pin()->GetOrCreateGameView().Pin().ToSharedRef());
 }
 
 
