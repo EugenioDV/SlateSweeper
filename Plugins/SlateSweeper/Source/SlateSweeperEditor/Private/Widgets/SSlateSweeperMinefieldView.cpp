@@ -58,9 +58,10 @@ TSharedRef<SWidget> SSlateSweeperMinefieldView::CraftGridCell(int32 InCellIndex)
 
 	// We use lambda to capture cell index and avoid extra code (e.g. SButton subclass to store index or index from XY)
 	return SNew(SButton)
-			.OnPressed_Lambda([this, InCellIndex]
+			.OnClicked_Lambda([this, InCellIndex]
 			{
 				OnCellPressedDelegate.Broadcast(InCellIndex);
+				return FReply::Handled();
 			});
 }
 

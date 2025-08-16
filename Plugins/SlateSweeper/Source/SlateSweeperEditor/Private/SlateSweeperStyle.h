@@ -7,6 +7,7 @@
 
 /*
  * The style isn't really used as aesthetics aren't requested for this tech test
+ * Admittedly, my opinion on this class is biased as my job used to be making it redundant
  * We do have a custom icon
  */
 

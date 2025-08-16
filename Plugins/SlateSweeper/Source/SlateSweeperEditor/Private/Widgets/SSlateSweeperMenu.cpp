@@ -1,7 +1,6 @@
 ﻿// This is a technical test from Eugenio Del Vecchio for Geotech, please do not share.
 
 #include "SSlateSweeperMenu.h"
-#include "SlateSweeperEditor.h"
 #include "SlateSweeperSettings.h"
 #include "Widgets/Input/SSpinBox.h"
 
@@ -133,12 +132,9 @@ void SSlateSweeperMenu::Construct(const FArguments& InArgs)
 				})
 			)
 		]
-
 		+SVerticalBox::Slot()
 		.VAlign(VAlign_Top)
 		.HAlign(HAlign_Left)
-		.FillHeight(1.f)
-		.Padding(20.f)
 		[
 			SNew(SButton)
 			.Text(LOCTEXT("StartNewGame", "Start New Game"))
