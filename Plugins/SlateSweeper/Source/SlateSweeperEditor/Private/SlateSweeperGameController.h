@@ -2,10 +2,9 @@
 
 #pragma once
 
-/* This would be our controller for a minesweeper game session
- * In this architecture, it owns the "view" (state) 
+/* Controller/owner for a minesweeper game session
+ * In this architecture, it spawns/owns the "view" (a slate widget) and the "model" (state)
  * It is the only gateway to access the view and the model
- * todo check out this comment, rework it and make it nice
  */
 
 class FSlateSweeperGameController

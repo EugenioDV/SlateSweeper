@@ -53,7 +53,7 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 
 	if (!IsValid(GameSettings) || !IsValid(GeneralSettings) || !SlateSweeperModule)
 	{
-		//todo throw error
+		UE_LOG(LogSlateSweeper, Error, TEXT("Failed to construct SlateSweeperTab. Valid checks failed."));
 		return;
 	}
 
@@ -173,48 +173,50 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 			.AutoHeight()
 			[
 				SNew(SButton)
-				.Text(LOCTEXT("Start New Session", "Start New Session"))
+				.Text(LOCTEXT("StartNewGame", "Start New Game"))
 				.OnPressed_Lambda([this]
 				{
-					OnStartGamePressed();
+					OnStartNewGamePressed();
 				})
-				//.OnPressed() //todo this is just test code
 			]
 			+SVerticalBox::Slot()
-			.VAlign(VAlign_Top)
-			.HAlign(HAlign_Left)
+			.VAlign(VAlign_Fill)
+			.HAlign(HAlign_Fill)
 			[
 				SNew(SScaleBox)
 				.Stretch(EStretch::ScaleToFit)
+				.StretchDirection(EStretchDirection::Both)
+				.HAlign(HAlign_Left)
+				.VAlign(VAlign_Top)
 				[
 					SAssignNew(MinefieldContainer, SBox)
 				]
 			]
 		]);
-
+	
 	// Attempt to recover the previous game in case of a closed-reopened tab
-	if (SlateSweeperModule->GetCurrentGameController().IsValid())
+	CurrentGame = SlateSweeperModule->GetCurrentGameController();
+	if (CurrentGame.IsValid())
 	{
-		CurrentGame = SlateSweeperModule->GetCurrentGameController();
 		MinefieldContainer->SetContent(CurrentGame.Pin()->GetSlateSweeperMinefield());
 	}
 }
 
-void SSlateSweeperTab::OnStartGamePressed()
+void SSlateSweeperTab::OnStartNewGamePressed()
 {
 	USlateSweeperGameSettings* GameSettings = GetMutableDefault<USlateSweeperGameSettings>();
 	const USlateSweeperSettings* GeneralSettings = GetDefault<USlateSweeperSettings>();
 
 	if (!IsValid(GameSettings) || !IsValid(GeneralSettings) || !SlateSweeperModule || !MinefieldContainer.IsValid())
 	{
-		//todo throw error
+		UE_LOG(LogSlateSweeper, Error, TEXT("Failed to start new game. Valid checks failed."));
 		return;
 	}
 	
 	CurrentGame = SlateSweeperModule->StartNewGame(GameSettings->GridWidth, GameSettings->GridHeight, GameSettings->TotalMines);
 	if (!CurrentGame.IsValid())
 	{
-		//todo throw error
+		UE_LOG(LogSlateSweeper, Error, TEXT("Failed to start new game. Valid checks failed."));
 		return;
 	}
 	

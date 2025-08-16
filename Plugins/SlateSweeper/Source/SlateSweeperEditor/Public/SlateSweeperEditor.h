@@ -8,7 +8,7 @@
 class FToolBarBuilder;
 class FMenuBuilder;
 
-
+DECLARE_LOG_CATEGORY_EXTERN(LogSlateSweeper, Log, All);
 
 /*
  * This guy acts as a composition root and lifetime owner (create controller, create tab)
@@ -18,6 +18,7 @@ class FMenuBuilder;
  *			aka IN is used in constructors for values that are taken IN (aka saved), out is used in functions for references to write to, all the rest is without in/pit
 * todo remove all class pre-function input in cpp files
 * todo all that stuff about FORCEINLINE and so on, I never use it =/
+* todo final checks verify it compiles on everything 
  */
 
 class FSlateSweeperEditor  : public IModuleInterface

@@ -4,6 +4,12 @@
 
 #include "Widgets/Docking/SDockTab.h"
 
+/* Main tab
+ *
+ *
+ * holds settings 
+ */
+
 class SSlateSweeperTab : public SDockTab
 {
 public:
@@ -17,11 +23,14 @@ public:
 
 private:
 	// Since the module creates the tab in this architecture,
-	// We can go simple as the module always outlives the tab
+	// We don't risk a dangling pointer as the module always outlives the tab
 	class FSlateSweeperEditor* SlateSweeperModule = nullptr;
-	
+
+	// The Game Controller kindly allows us to grab the view at any time and display it on the tab
 	TWeakPtr<class FSlateSweeperGameController, ESPMode::ThreadSafe> CurrentGame;
+
+	// The "slot" for the game view
+ 	TSharedPtr<SBox> MinefieldContainer;
 	
-	TSharedPtr<SBox> MinefieldContainer;
-	void OnStartGamePressed();
+	void OnStartNewGamePressed();
 };

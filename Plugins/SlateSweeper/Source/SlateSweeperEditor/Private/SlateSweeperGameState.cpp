@@ -1,12 +1,13 @@
 ﻿// This is a technical test from Eugenio Del Vecchio for Geotech, please do not share.
 
 #include "SlateSweeperGameState.h"
+#include "SlateSweeperEditor.h"
 
 void AllocateMines(TBitArray<>& OutBombCells, int32 TotalMines, int32 TotalCells)
 {
 	if (TotalMines > TotalCells)
 	{
-		//todo throw error
+		UE_LOG(LogSlateSweeper, Error, TEXT("Failed to allocate mines. TotalMines > TotalCells"));
 		return;
 	}
 	

@@ -8,6 +8,8 @@
 #include "Misc/MessageDialog.h"
 #include "ToolMenus.h"
 
+DEFINE_LOG_CATEGORY(LogSlateSweeper);
+
 static const FName SlateSweeperTabName("SlateSweeper");
 
 #define LOCTEXT_NAMESPACE "FSlateSweeperEditorModule"
@@ -41,6 +43,7 @@ void FSlateSweeperEditor::ShutdownModule()
 	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
 	// we call this function before unloading the module.
 
+	
 	UToolMenus::UnRegisterStartupCallback(this);
 
 	UToolMenus::UnregisterOwner(this);
@@ -48,6 +51,9 @@ void FSlateSweeperEditor::ShutdownModule()
 	FSlateSweeperStyle::Shutdown();
 
 	FSlateSweeperCommands::Unregister();
+
+	// Clarifies our intention to other developers and makes sure the game is destroyed before the module
+	CurrentGame.Reset();
 }
 
 void FSlateSweeperEditor::OpenSlateSweeperWindow()
