@@ -12,7 +12,7 @@ class FSlateSweeperGameState
 {
 public:
 
-	FSlateSweeperGameState(uint8 InMineGridWidth, uint8 InMineGridHeight, int32 InTotalMines); //todo int for total mines?
+	FSlateSweeperGameState(uint8 InMineGridWidth, uint8 InMineGridHeight, int32 InTotalMines);
 
 	void RevealCell(int32 CellIndex);
 

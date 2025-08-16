@@ -35,6 +35,11 @@ class USlateSweeperSettings : public UDeveloperSettings
 	GENERATED_BODY()
 
 public:
+	
+	UPROPERTY(EditAnywhere, config, Category="Aesthetics", meta = (ClampMin="10", ClampMax="50"))
+	float DesiredCellSize = 25.f;
+
+	// Grid size constraints
 	UPROPERTY(EditAnywhere, config, Category="Grid Limits", meta = (ClampMin="4", ClampMax="100"))
 	uint8 MinGridWidth = 4;
 
@@ -46,31 +51,6 @@ public:
 
 	UPROPERTY(EditAnywhere, config, Category="Grid Limits", meta = (ClampMin="4", ClampMax="100"))
 	uint8 MaxGridHeight = 50;
-	
-	// Difficulty thresholds to help the user understand what they're going to face
-	UPROPERTY(EditAnywhere, config, Category="Difficulty Thresholds", meta = (ClampMin="0.0", ClampMax="1.0"))
-	float MediumThreshold = 0.15f;
-
-	UPROPERTY(EditAnywhere, config, Category="Difficulty Thresholds", meta = (ClampMin="0.0", ClampMax="1.0"))
-	float HardThreshold = 0.25f;
-
-	TTuple<FText, FSlateColor> GetDifficultyLabel(int32 GridWidth, int32 GridHeight, int32 TotalMines) const
-	{
-		const float MineRatio = static_cast<float>(TotalMines) / (GridWidth * GridHeight);
-
-		if (MineRatio < MediumThreshold)
-		{
-			return MakeTuple(FText::FromString(TEXT("Easy")), FSlateColor(FLinearColor::Green));
-		}
-		else if (MineRatio < HardThreshold)
-		{
-			return MakeTuple(FText::FromString(TEXT("Medium")), FSlateColor(FLinearColor::Yellow));
-		}
-		else
-		{
-			return MakeTuple(FText::FromString(TEXT("Hard")), FSlateColor(FLinearColor::Red));
-		}
-	}
 
 	// Allowed mines are just hard limits for now, so we can test the boundaries of the system
 	int32 GetMinAllowedMines(int32 GridWidth, int32 GridHeight) const
@@ -116,21 +96,6 @@ public:
 			if (MaxGridHeight < MinGridHeight)
 			{
 				MinGridHeight = MaxGridHeight;
-			}
-		}
-
-		if (PropName == GET_MEMBER_NAME_CHECKED(USlateSweeperSettings, MediumThreshold))
-		{
-			if (MediumThreshold > HardThreshold)
-			{
-				HardThreshold = MediumThreshold;
-			}
-		}
-		else if (PropName == GET_MEMBER_NAME_CHECKED(USlateSweeperSettings, HardThreshold))
-		{
-			if (HardThreshold < MediumThreshold)
-			{
-				MediumThreshold = HardThreshold;
 			}
 		}
 	}

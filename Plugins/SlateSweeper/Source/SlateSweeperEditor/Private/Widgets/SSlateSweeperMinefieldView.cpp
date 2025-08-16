@@ -2,6 +2,7 @@
 
 #include "SSlateSweeperMinefieldView.h"
 #include "SlateSweeperEditor.h"
+#include "SlateSweeperSettings.h"
 #include "Widgets/Input/SButton.h"
 #include "Widgets/Layout/SUniformGridPanel.h"
 #include "Widgets/Text/STextBlock.h"
@@ -81,9 +82,10 @@ void SSlateSweeperMinefieldView::PopulateGrid()
 	}
 }
 
-void SSlateSweeperMinefieldView::Construct(const FArguments& InArgs) //todo this looks weird
+void SSlateSweeperMinefieldView::Construct(const FArguments& InArgs)
 {
 	ViewData = InArgs._ViewData;
+
 
 	if (!ViewData.IsValid())
 	{
@@ -99,18 +101,21 @@ void SSlateSweeperMinefieldView::Construct(const FArguments& InArgs) //todo this
 		return;
 	}
 
+	const USlateSweeperSettings* GeneralSettings = GetDefault<USlateSweeperSettings>();
+	float DesiredCellSize = GeneralSettings ? GeneralSettings->DesiredCellSize : 25.f;
+
 	GridPanel = SNew(SUniformGridPanel)
-				.MinDesiredSlotHeight(25.f) //todo standard for cell size? Where should I store style stuff like this?
-				.MinDesiredSlotWidth(25.f);
+				.MinDesiredSlotHeight(DesiredCellSize)
+				.MinDesiredSlotWidth(DesiredCellSize);
 
 	PopulateGrid();
 
 	// Don't let the grid stretch, even when dimensions aren't 1:1
-	float AspectRatio = static_cast<float>(ViewDataRef.GridWidth) / ViewDataRef.GridHeight;
+	float AspectRatio = static_cast<float>(ViewDataRef.GridWidth) /  static_cast<float>(ViewDataRef.GridHeight);
 	SBox::Construct(
 		SBox::FArguments()
 		[
-			GridPanel.ToSharedRef() //todo this whole grid panel thing is cringe
+			GridPanel.ToSharedRef()
 		]
 		.MaxAspectRatio(AspectRatio)
 		.MinAspectRatio(AspectRatio)
@@ -126,6 +131,8 @@ void SSlateSweeperMinefieldView::Update(const TWeakPtr<const FSlateSweeperGridDa
 		return;
 	}
 	
+	// I found that repopulating a 100x100 grid only eats about 4ms on my Ryzen 9 7940HS
+	// So optimisation would be unnecessary for the scope of this project
 	ViewData = NewData;
 	GridPanel->ClearChildren();
 	PopulateGrid();

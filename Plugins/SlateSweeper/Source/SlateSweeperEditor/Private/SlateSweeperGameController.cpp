@@ -15,7 +15,7 @@ FSlateSweeperGameController::FSlateSweeperGameController(uint8 InMineGridWidth, 
 void FSlateSweeperGameController::HandleOnCellPressed(int32 CellIndex)
 {
 	GameState->RevealCell(CellIndex);
-	GameView->Update(GameState->GetGridData()); //todo this is a temp solution just to test the game
+	GameView->Update(GameState->GetGridData());
 }
 
 TWeakPtr<SSlateSweeperMinefieldView> FSlateSweeperGameController::GetOrCreateGameView()
