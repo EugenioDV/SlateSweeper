@@ -63,7 +63,7 @@ void FSlateSweeperEditor::OpenSlateSweeperWindow()
 
 TSharedRef<SDockTab> FSlateSweeperEditor::SpawnSlateSweeperWindow(const class FSpawnTabArgs& SpawnTabArgs)
 {
-	return SNew(SSlateSweeperTab).Module(this);
+	return SNew(SSlateSweeperTab);
 }
 
 TWeakPtr<FSlateSweeperGameController, ESPMode::ThreadSafe> FSlateSweeperEditor::StartNewGame(uint8 GameMineGridWidth, uint8 GameMineGridHeight,

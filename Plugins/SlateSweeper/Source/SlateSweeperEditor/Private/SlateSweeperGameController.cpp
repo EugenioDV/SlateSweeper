@@ -27,7 +27,7 @@ TWeakPtr<SSlateSweeperMinefieldView> FSlateSweeperGameController::GetOrCreateGam
 		// Lengthy registration but ensures delegate safety 
 		GameView->RegisterOnCellPressed
 		(
-			SSlateSweeperMinefieldView::FOnCellPressed::FDelegate::CreateRaw
+			FOnSlateSweeperCellPressed::FDelegate::CreateRaw
 			(
 				this,
 				&FSlateSweeperGameController::HandleOnCellPressed

@@ -14,20 +14,15 @@
 class SSlateSweeperTab : public SDockTab
 {
 public:
-	
+
 	SLATE_BEGIN_ARGS(SSlateSweeperTab)
 	{}
-	SLATE_ARGUMENT(class FSlateSweeperEditor*, Module)
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs);
 
 private:
 	
-	// Since the module creates the tab in this architecture,
-	// We don't risk a dangling pointer as the module always outlives the tab
-	class FSlateSweeperEditor* SlateSweeperModule = nullptr;
-
 	// The Game Controller kindly allows us to grab the view at any time and display it on the tab
 	TWeakPtr<class FSlateSweeperGameController, ESPMode::ThreadSafe> CurrentGame;
 

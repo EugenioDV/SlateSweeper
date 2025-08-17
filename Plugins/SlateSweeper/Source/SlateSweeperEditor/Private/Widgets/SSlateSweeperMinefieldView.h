@@ -2,7 +2,7 @@
 
 #pragma once
 #include "Widgets/Layout/SBox.h"
-#include "SlateSweeperGridData.h"
+#include "SlateSweeperTypes.h"
 
 
 /*
@@ -13,8 +13,6 @@
 class SSlateSweeperMinefieldView : public SBox
 {
 public:
-	DECLARE_MULTICAST_DELEGATE_OneParam(FOnCellPressed, int32 /*CellIndex*/)
-	
 	SLATE_BEGIN_ARGS(SSlateSweeperMinefieldView)
 	{}
 	SLATE_ARGUMENT(TWeakPtr<const FSlateSweeperGridData>, ViewData)
@@ -25,7 +23,7 @@ public:
 	void Update(const TWeakPtr<const FSlateSweeperGridData>& NewData);
 	
 	// We don't want anyone editing the delegate or calling it from outside, but we do want to accept listeners
-	FDelegateHandle RegisterOnCellPressed(const FOnCellPressed::FDelegate& InDelegate)
+	FDelegateHandle RegisterOnCellPressed(const FOnSlateSweeperCellPressed::FDelegate& InDelegate)
 	{
 		return OnCellPressedDelegate.Add(InDelegate);
 	}
@@ -34,7 +32,7 @@ private:
 
 	// This is basically the only way the view "talks" to anything else
 	// otherwise its job is just to sit there and look pretty (allegedly)
-	FOnCellPressed OnCellPressedDelegate;
+	FOnSlateSweeperCellPressed OnCellPressedDelegate;
 	
 	TSharedRef<SWidget> CraftGridCell(int32 InCellIndex) const;
 	TSharedPtr<class SUniformGridPanel> GridPanel;

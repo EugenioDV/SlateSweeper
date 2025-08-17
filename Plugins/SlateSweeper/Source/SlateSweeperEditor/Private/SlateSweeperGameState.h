@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "SlateSweeperGridData.h"
+#include "SlateSweeperTypes.h"
 
 /*
  * The "state" class for our game a bit similar to the "model" of a MVC pattern

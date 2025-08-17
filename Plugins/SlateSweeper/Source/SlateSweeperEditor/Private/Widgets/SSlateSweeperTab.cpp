@@ -10,9 +10,7 @@
 
 void SSlateSweeperTab::Construct(const FArguments& InArgs)
 {
-	SlateSweeperModule = InArgs._Module;
-
-	check (SlateSweeperModule)
+	FSlateSweeperEditor& SlateSweeperModule =  FModuleManager::LoadModuleChecked<FSlateSweeperEditor>("SlateSweeperEditor");
 
 	SDockTab::Construct(
 		SDockTab::FArguments()
@@ -36,7 +34,7 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 		]);
 	
 	// Attempt to recover the previous game in case of a closed-reopened tab
-	CurrentGame = SlateSweeperModule->GetCurrentGameController();
+	CurrentGame = SlateSweeperModule.GetCurrentGameController();
 	if (CurrentGame.IsValid())
 	{
 		MinefieldContainer->SetContent(CurrentGame.Pin()->GetOrCreateGameView().Pin().ToSharedRef());
@@ -45,7 +43,9 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 
 void SSlateSweeperTab::OnStartNewGamePressed(uint8 GridWidth, uint8 GridHeight, int32 TotalMines)
 {
-	CurrentGame = SlateSweeperModule->StartNewGame(GridWidth, GridHeight, TotalMines);
+	FSlateSweeperEditor& SlateSweeperModule =  FModuleManager::LoadModuleChecked<FSlateSweeperEditor>("SlateSweeperEditor");
+	
+	CurrentGame = SlateSweeperModule.StartNewGame(GridWidth, GridHeight, TotalMines);
 	
 	if (!CurrentGame.IsValid())
 	{

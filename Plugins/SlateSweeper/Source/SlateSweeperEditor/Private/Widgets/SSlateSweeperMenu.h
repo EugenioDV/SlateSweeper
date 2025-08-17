@@ -5,7 +5,6 @@
 class SSlateSweeperMenu : public SCompoundWidget
 {
 public:
-	/** Delegate for notification for a rotator value change */
 	DECLARE_DELEGATE_ThreeParams(FOnStartGameClicked, uint8 /*GridWidth*/, uint8 /*GridHeight*/, int32 /*NumMines*/);
 	
 	SLATE_BEGIN_ARGS(SSlateSweeperMenu)
