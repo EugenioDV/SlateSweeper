@@ -2,6 +2,7 @@
 
 #include "SSlateSweeperTab.h"
 #include "SlateSweeperEditor.h"
+#include "SlateSweeperEditorSettings.h"
 #include "SlateSweeperGameController.h"
 #include "SSlateSweeperMenu.h"
 #include "SSlateSweeperMinefieldView.h"
@@ -10,6 +11,7 @@
 void SSlateSweeperTab::Construct(const FArguments& InArgs)
 {
 	FSlateSweeperEditor& SlateSweeperModule =  FModuleManager::LoadModuleChecked<FSlateSweeperEditor>("SlateSweeperEditor");
+	const USlateSweeperEditorSettings* GeneralSettings = GetDefault<USlateSweeperEditorSettings>();
 
 	SDockTab::Construct(
 		SDockTab::FArguments()
@@ -19,6 +21,8 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 			+SVerticalBox::Slot()
 			.AutoHeight()
 			.VAlign(VAlign_Top)
+			// Leave some space at the bottom so the grid appears separated from the menu
+			.Padding(FMargin(0.f, 0.f, 0.f, GeneralSettings ? GeneralSettings->DesiredCellSize/2.f : 10.f))
 			[
 				SNew(SSlateSweeperMenu)
 				.OnStartGameClicked(this, &SSlateSweeperTab::OnStartNewGamePressed)
