@@ -5,8 +5,6 @@
 #include "Widgets/SSlateSweeperMinefieldView.h"
 
 
-
-
 FSlateSweeperGameController::FSlateSweeperGameController(const FSlateSweeperNewGameSettings& InGameSettings)
 	: GameState(MakeShared<FSlateSweeperGameState>(InGameSettings))
 {

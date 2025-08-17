@@ -6,10 +6,8 @@
 #include "Widgets/Docking/SDockTab.h"
 
 /*
- * Main tab
- * todo describe this
- *
- * holds settings 
+ * Main tab for our module
+ * In this stage of the project it holds the game view and the settings menu to start a game
  */
 
 class SSlateSweeperTab : public SDockTab
