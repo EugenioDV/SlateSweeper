@@ -6,7 +6,7 @@
 
 void FSlateSweeperCommands::RegisterCommands()
 {
-	UI_COMMAND(OpenSlateSweeperWindow, "SlateSweeper", "Summon the mighty SlateSweeper Window", EUserInterfaceActionType::Button, FInputChord());
+	UI_COMMAND(OpenSlateSweeperWindow, "SlateSweeper", "Summon the Mighty SlateSweeper Window", EUserInterfaceActionType::Button, FInputChord());
 }
 
 #undef LOCTEXT_NAMESPACE

@@ -1,7 +1,7 @@
 ﻿// This is a technical test from Eugenio Del Vecchio for Geotech, please do not share.
 
 #include "SSlateSweeperMenu.h"
-#include "SlateSweeperSettings.h"
+#include "SlateSweeperEditorSettings.h"
 #include "Widgets/Input/SSpinBox.h"
 
 #define LOCTEXT_NAMESPACE "FSlateSweeperEditor"
@@ -28,7 +28,7 @@ void SSlateSweeperMenu::Construct(const FArguments& InArgs)
 {
 	OnStartGameClicked = InArgs._OnStartGameClicked;
 	USlateSweeperGameSettings* GameSettings = GetMutableDefault<USlateSweeperGameSettings>();
-	const USlateSweeperSettings* GeneralSettings = GetDefault<USlateSweeperSettings>();
+	const USlateSweeperEditorSettings* GeneralSettings = GetDefault<USlateSweeperEditorSettings>();
 
 	check(IsValid(GameSettings) && IsValid(GeneralSettings))
 

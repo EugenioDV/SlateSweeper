@@ -2,7 +2,7 @@
 
 #include "SSlateSweeperMinefieldView.h"
 #include "SlateSweeperEditor.h"
-#include "SlateSweeperSettings.h"
+#include "SlateSweeperEditorSettings.h"
 #include "Widgets/SInvalidationPanel.h"
 #include "Widgets/Input/SButton.h"
 #include "Widgets/Layout/SUniformGridPanel.h"
@@ -99,7 +99,7 @@ void SSlateSweeperMinefieldView::Construct(const FArguments& InArgs)
 		return;
 	}
 
-	const USlateSweeperSettings* GeneralSettings = GetDefault<USlateSweeperSettings>();
+	const USlateSweeperEditorSettings* GeneralSettings = GetDefault<USlateSweeperEditorSettings>();
 	float DesiredCellSize = GeneralSettings ? GeneralSettings->DesiredCellSize : 25.f;
 
 	GridPanel = SNew(SUniformGridPanel)

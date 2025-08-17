@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
-#include "SlateSweeperSettings.generated.h"
+#include "SlateSweeperEditorSettings.generated.h"
 
 /*
  * Settings for starting a single SlateSweeper game
@@ -24,13 +24,13 @@ public:
 
 
 /*
- * Editor-only settings for Slate Sweeper.
+ * Editor-only general settings for Slate Sweeper.
  * Regulates maximum grid size, cell/mine ratio and so forth
  * Visible in the editor settings like any other plugin settings.
  */
 
 UCLASS(config=Editor, defaultconfig, meta = (DisplayName="Slate Sweeper Editor Settings"))
-class USlateSweeperSettings : public UDeveloperSettings
+class USlateSweeperEditorSettings : public UDeveloperSettings
 {
 	GENERATED_BODY()
 
@@ -69,14 +69,14 @@ public:
 
 		const FName PropName = PropertyChangedEvent.Property ? PropertyChangedEvent.Property->GetFName() : NAME_None;
 
-		if (PropName == GET_MEMBER_NAME_CHECKED(USlateSweeperSettings, MinGridWidth))
+		if (PropName == GET_MEMBER_NAME_CHECKED(USlateSweeperEditorSettings, MinGridWidth))
 		{
 			if (MinGridWidth > MaxGridWidth)
 			{
 				MaxGridWidth = MinGridWidth;
 			}
 		}
-		else if (PropName == GET_MEMBER_NAME_CHECKED(USlateSweeperSettings, MaxGridWidth))
+		else if (PropName == GET_MEMBER_NAME_CHECKED(USlateSweeperEditorSettings, MaxGridWidth))
 		{
 			if (MaxGridWidth < MinGridWidth)
 			{
@@ -84,14 +84,14 @@ public:
 			}
 		}
 
-		if (PropName == GET_MEMBER_NAME_CHECKED(USlateSweeperSettings, MinGridHeight))
+		if (PropName == GET_MEMBER_NAME_CHECKED(USlateSweeperEditorSettings, MinGridHeight))
 		{
 			if (MinGridHeight > MaxGridHeight)
 			{
 				MaxGridHeight = MinGridHeight;
 			}
 		}
-		else if (PropName == GET_MEMBER_NAME_CHECKED(USlateSweeperSettings, MaxGridHeight))
+		else if (PropName == GET_MEMBER_NAME_CHECKED(USlateSweeperEditorSettings, MaxGridHeight))
 		{
 			if (MaxGridHeight < MinGridHeight)
 			{
