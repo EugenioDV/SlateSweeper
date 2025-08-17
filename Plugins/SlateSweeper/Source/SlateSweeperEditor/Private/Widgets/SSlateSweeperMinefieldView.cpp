@@ -3,6 +3,7 @@
 #include "SSlateSweeperMinefieldView.h"
 #include "SlateSweeperEditor.h"
 #include "SlateSweeperSettings.h"
+#include "Widgets/SInvalidationPanel.h"
 #include "Widgets/Input/SButton.h"
 #include "Widgets/Layout/SUniformGridPanel.h"
 #include "Widgets/Text/STextBlock.h"
@@ -45,13 +46,9 @@ TSharedRef<SWidget> SSlateSweeperMinefieldView::CraftGridCell(int32 InCellIndex)
 				// We only create the text widget if there is a text to display, using the SNullWidget trick
 				ViewDataRef.CellNeighbourCounts[InCellIndex] > 0
 				? SNew(STextBlock)
+				.SimpleTextMode(true)
 				.Visibility(EVisibility::HitTestInvisible)
 				.Text(FText::AsNumber(ViewDataRef.CellNeighbourCounts[InCellIndex]))
-				.AutoWrapText(false)
-				.Margin(0.f)
-				.ApplyLineHeightToBottomLine(false)
-				.Justification(ETextJustify::Center)
-				.Clipping(EWidgetClipping::OnDemand)
 				: SNullWidget::NullWidget
 			];
 	}
@@ -120,9 +117,18 @@ void SSlateSweeperMinefieldView::Construct(const FArguments& InArgs)
 		.VAlign(VAlign_Top)
 		.HAlign(HAlign_Left)
 		[
-			SNew(SBorder)
+			/*
+			 * InvalidationPanel offers a quick but effective performance boost
+			 * Idle 100x100 grid sees 15 ms sliced off, on a Ryzen 9 CPU
+			 * This is not to be taken as a replacement for profiling and optimisation work
+			 * Which would require a completely different approach
+			 */ 
+			SNew(SInvalidationPanel)
 			[
-				GridPanel.ToSharedRef()
+				SNew(SBorder)
+				[
+					GridPanel.ToSharedRef()
+				]
 			]
 		]
 	);
@@ -137,8 +143,11 @@ void SSlateSweeperMinefieldView::Update(const TWeakPtr<const FSlateSweeperGridDa
 		return;
 	}
 	
-	// I found that repopulating a 100x100 grid only eats about 4ms on my Ryzen 9 7940HS
-	// So optimisation would be unnecessary for the scope of this project
+	/*
+	 * I found that repopulating a 100x100 grid eats about 20 ms on my Ryzen 9 7940HS
+	 * So optimisation would be unnecessary for the scope of this project.
+	 * But I would probably start from here.
+	 */
 	ViewData = NewData;
 	GridPanel->ClearChildren();
 	PopulateGrid();
