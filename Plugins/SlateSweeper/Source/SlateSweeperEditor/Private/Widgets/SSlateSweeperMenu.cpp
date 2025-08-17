@@ -8,6 +8,8 @@
 
 #define LOCTEXT_NAMESPACE "FSlateSweeperEditor"
 
+
+
 void SSlateSweeperMenu::Construct(const FArguments& InArgs)
 {
 	OnStartGameClicked = InArgs._OnStartGameClicked;
@@ -16,30 +18,32 @@ void SSlateSweeperMenu::Construct(const FArguments& InArgs)
 	const USlateSweeperEditorSettings* GeneralSettings = GetDefault<USlateSweeperEditorSettings>();
 	check(IsValid(GameSettings) && IsValid(GeneralSettings))
 
-	TSharedRef<SVerticalBox> VerticalBox = SNew(SVerticalBox);
 
 	/*
 	 * We add the various sections row by row, in a hardcoded fashion
 	 * We could do much better with a builder, standards, splitters and so on
 	 * But aesthetics not being a priority, we'd be out of scope for this project
 	 */
-	int32 Row = 0;
+	
+	TSharedRef<SVerticalBox> MenuRowHost = SNew(SVerticalBox);
 
-	constexpr float HorizontalMargin = 12.f;
-	constexpr float VerticalMargin = 12.f;
+	static constexpr float HorizontalMargin = 12.f;
+	static constexpr float VerticalMargin = 12.f;
 
-	//Dimensions Row
-	VerticalBox->AddSlot()
+
+	// Title row
+	MenuRowHost->AddSlot()
+	.Padding(HorizontalMargin, VerticalMargin, HorizontalMargin, 0.f)
+	[
+		SNew(STextBlock)
+		.Text(LOCTEXT("SettingsMenuTitle", "Game Settings:"))
+	];
+	
+	// Dimensions row
+	MenuRowHost->AddSlot()
 	.Padding(HorizontalMargin, VerticalMargin, 0.f, 0.f)
 	[
 		SNew(SHorizontalBox)
-		+SHorizontalBox::Slot()
-		.AutoWidth()
-		.VAlign(VAlign_Center)
-		.Padding(0.f, 0.f, HorizontalMargin, 0.f)
-		[
-			SNew(STextBlock).Text(LOCTEXT("Dimensions", "Dimensions"))
-		]
 		+SHorizontalBox::Slot()
 		.AutoWidth()
 		.VAlign(VAlign_Center)
@@ -100,20 +104,21 @@ void SSlateSweeperMenu::Construct(const FArguments& InArgs)
 	];
 
 	// Number of mines row
-	VerticalBox->AddSlot()
-	.Padding(HorizontalMargin, VerticalMargin, 0.f, 0.f)
+	MenuRowHost->AddSlot()
+	.Padding(HorizontalMargin, VerticalMargin, HorizontalMargin, 0.f)
 	[
 		SNew(SHorizontalBox)
 		+SHorizontalBox::Slot()
-		.AutoWidth()
 		.VAlign(VAlign_Center)
+		.AutoWidth()
+		.Padding(0.f, 0.f, HorizontalMargin, 0.f)
 		[
 			SNew(STextBlock)
 			.Text(LOCTEXT("NumberOfMines", "Number of Mines"))
 		]
 		+SHorizontalBox::Slot()
-		.Padding(HorizontalMargin,0.f,HorizontalMargin,0.f)
 		.VAlign(VAlign_Center)
+		.FillWidth(1.f)
 		[
 			SNew(SSpinBox<int32>)
 			.MinValue_Lambda([GameSettings, GeneralSettings]
@@ -141,7 +146,7 @@ void SSlateSweeperMenu::Construct(const FArguments& InArgs)
 	];
 
 	// Start button row
-	VerticalBox->AddSlot()
+	MenuRowHost->AddSlot()
 	.Padding(HorizontalMargin, VerticalMargin, HorizontalMargin, VerticalMargin)
 	.HAlign(HAlign_Left)
 	[
@@ -158,9 +163,20 @@ void SSlateSweeperMenu::Construct(const FArguments& InArgs)
 	[
 		SNew(SBorder)
 		[
-			VerticalBox
+			MenuRowHost
 		]
 	];
 }
 
 #undef LOCTEXT_NAMESPACE
+
+/*
+SNew(STextBlock).Text(LOCTEXT("Dimensions", "Dimensions")),
+SNew(SHorizontalBox)
++SHorizontalBox::Slot()
+.AutoWidth()
+.VAlign(VAlign_Center)
+[
+	SNew(STextBlock)
+	.Text(LOCTEXT("Width", "Width"))
+]*/

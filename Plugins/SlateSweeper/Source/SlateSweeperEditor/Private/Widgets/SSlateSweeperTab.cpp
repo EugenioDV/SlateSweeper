@@ -5,7 +5,7 @@
 #include "SlateSweeperEditorSettings.h"
 #include "SlateSweeperGameController.h"
 #include "SSlateSweeperMenu.h"
-#include "SSlateSweeperMinefieldView.h"
+#include "SSlateSweeperGameView.h"
 
 
 void SSlateSweeperTab::Construct(const FArguments& InArgs)
@@ -13,6 +13,8 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 	FSlateSweeperEditor& SlateSweeperModule =  FModuleManager::LoadModuleChecked<FSlateSweeperEditor>("SlateSweeperEditor");
 	const USlateSweeperEditorSettings* GeneralSettings = GetDefault<USlateSweeperEditorSettings>();
 
+	const float Padding = GeneralSettings ? GeneralSettings->DesiredCellSize/2.f : 10.f;
+	
 	SDockTab::Construct(
 		SDockTab::FArguments()
 		.TabRole(ETabRole::NomadTab)
@@ -21,8 +23,7 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 			+SVerticalBox::Slot()
 			.AutoHeight()
 			.VAlign(VAlign_Top)
-			// Leave some space at the bottom so the grid appears separated from the menu
-			.Padding(FMargin(0.f, 0.f, 0.f, GeneralSettings ? GeneralSettings->DesiredCellSize/2.f : 10.f))
+			.Padding(Padding, Padding, Padding, Padding)
 			[
 				SNew(SSlateSweeperMenu)
 				.OnStartGameClicked(this, &SSlateSweeperTab::OnStartNewGamePressed)
@@ -31,6 +32,7 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 			.FillHeight(1.f)
 			.VAlign(VAlign_Top)
 			.HAlign(HAlign_Left)
+			.Padding(Padding, 0.f, Padding, Padding)
 			[
 				SAssignNew(MinefieldContainer, SBox)
 			]

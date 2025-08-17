@@ -1,6 +1,6 @@
 ﻿// This is a technical test from Eugenio Del Vecchio for Geotech, please do not share.
 
-#include "SSlateSweeperMinefieldView.h"
+#include "SSlateSweeperGameView.h"
 #include "SlateSweeperEditor.h"
 #include "SlateSweeperEditorSettings.h"
 #include "Widgets/SInvalidationPanel.h"
@@ -9,7 +9,7 @@
 #include "Widgets/Text/STextBlock.h"
 
 
-TSharedRef<SWidget> SSlateSweeperMinefieldView::CraftGridCell(int32 InCellIndex) const
+TSharedRef<SWidget> SSlateSweeperGameView::CraftGridCell(int32 InCellIndex) const
 {
 	const FSlateSweeperGridData& ViewDataRef = *ViewData.Pin();
 
@@ -62,7 +62,7 @@ TSharedRef<SWidget> SSlateSweeperMinefieldView::CraftGridCell(int32 InCellIndex)
 			});
 }
 
-void SSlateSweeperMinefieldView::PopulateGrid()
+void SSlateSweeperGameView::PopulateGrid()
 {
 	const FSlateSweeperGridData& ViewDataRef = *ViewData.Pin();
 
@@ -80,14 +80,14 @@ void SSlateSweeperMinefieldView::PopulateGrid()
 	}
 }
 
-void SSlateSweeperMinefieldView::Construct(const FArguments& InArgs)
+void SSlateSweeperGameView::Construct(const FArguments& InArgs)
 {
 	ViewData = InArgs._ViewData;
 
 
 	if (!ViewData.IsValid())
 	{
-		UE_LOG(LogSlateSweeper, Error, TEXT("Failed to create Minefield View. ViewData invalid"));
+		UE_LOG(LogSlateSweeper, Error, TEXT("Failed to create SlateSweeper View. ViewData invalid"));
 		return;
 	}
 
@@ -95,7 +95,7 @@ void SSlateSweeperMinefieldView::Construct(const FArguments& InArgs)
 
 	if (ViewDataRef.GridWidth == 0 || ViewDataRef.GridHeight == 0)
 	{
-		UE_LOG(LogSlateSweeper, Error, TEXT("Failed to create Minefield View. Grid size invalid"));
+		UE_LOG(LogSlateSweeper, Error, TEXT("Failed to create SlateSweeper View. Grid size invalid"));
 		return;
 	}
 
@@ -135,11 +135,11 @@ void SSlateSweeperMinefieldView::Construct(const FArguments& InArgs)
 	
 }
 
-void SSlateSweeperMinefieldView::Update(const TWeakPtr<const FSlateSweeperGridData>& NewData)
+void SSlateSweeperGameView::Update(const TWeakPtr<const FSlateSweeperGridData>& NewData)
 {
 	if (!NewData.IsValid())
 	{
-		UE_LOG(LogSlateSweeper, Error, TEXT("Failed to update Minefield View. ViewData invalid"));
+		UE_LOG(LogSlateSweeper, Error, TEXT("Failed to update SlateSweeper View. ViewData invalid"));
 		return;
 	}
 	

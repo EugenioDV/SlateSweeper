@@ -10,10 +10,10 @@
  * Responsible only for visuals and passing on user input
  * If we were to implement a new visual aspect of the experience, we'd do it here
  */
-class SSlateSweeperMinefieldView : public SBox
+class SSlateSweeperGameView : public SBox
 {
 public:
-	SLATE_BEGIN_ARGS(SSlateSweeperMinefieldView)
+	SLATE_BEGIN_ARGS(SSlateSweeperGameView)
 	{}
 	SLATE_ARGUMENT(TWeakPtr<const FSlateSweeperGridData>, ViewData)
 	SLATE_END_ARGS()

@@ -96,4 +96,4 @@ void FSlateSweeperEditor::RegisterMenus()
 
 #undef LOCTEXT_NAMESPACE
 	
-IMPLEMENT_MODULE(FSlateSweeperEditor, SlateSweeper)
+IMPLEMENT_MODULE(FSlateSweeperEditor, SlateSweeperEditor)

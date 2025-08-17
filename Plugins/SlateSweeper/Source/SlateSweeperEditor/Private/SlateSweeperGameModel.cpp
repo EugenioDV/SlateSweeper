@@ -1,6 +1,6 @@
 ﻿// This is a technical test from Eugenio Del Vecchio for Geotech, please do not share.
 
-#include "SlateSweeperGameState.h"
+#include "SlateSweeperGameModel.h"
 #include "SlateSweeperEditor.h"
 
 /* Minesweeper helper functions START
@@ -159,7 +159,7 @@ void FloodRevealCells(int32 CellIndex, uint8 GridWidth, uint8 GridHeight, const 
 
 /* Minesweeper helper functions END */
 
-FSlateSweeperGameState::FSlateSweeperGameState(const FSlateSweeperNewGameSettings& InGameSettings)
+FSlateSweeperGameModel::FSlateSweeperGameModel(const FSlateSweeperNewGameSettings& InGameSettings)
 	: GridData (MakeShared<FSlateSweeperGridData>())
 {
 	
@@ -174,7 +174,7 @@ FSlateSweeperGameState::FSlateSweeperGameState(const FSlateSweeperNewGameSetting
 	ComputeMineNeighbourCounts(GridData->CellNeighbourCounts, GridData->MineCells, GridData->GridWidth, GridData->GridHeight);
 }
 
-ESlateSweeperCellRevealOutcome FSlateSweeperGameState::RevealCell(int32 CellIndex)
+ESlateSweeperCellRevealOutcome FSlateSweeperGameModel::RevealCell(int32 CellIndex)
 {
 	if (!GridData->RevealedCells.IsValidIndex(CellIndex) || GridData->RevealedCells[CellIndex])
 	{
@@ -201,7 +201,7 @@ ESlateSweeperCellRevealOutcome FSlateSweeperGameState::RevealCell(int32 CellInde
 	return ESlateSweeperCellRevealOutcome::FloodReveal;
 }
 
-TWeakPtr<const FSlateSweeperGridData> FSlateSweeperGameState::GetGridData() const
+TWeakPtr<const FSlateSweeperGridData> FSlateSweeperGameModel::GetGridData() const
 {
 	return GridData;
 }

@@ -7,6 +7,7 @@
 class SSlateSweeperMenu : public SCompoundWidget
 {
 public:
+	
 	DECLARE_DELEGATE_OneParam(FOnStartGameClicked, const FSlateSweeperNewGameSettings& /*New Game Settings*/);
 	
 	SLATE_BEGIN_ARGS(SSlateSweeperMenu)
@@ -17,6 +18,6 @@ public:
 	void Construct(const FArguments& InArgs);
 
 private:
+	
 	FOnStartGameClicked OnStartGameClicked;
-
 };

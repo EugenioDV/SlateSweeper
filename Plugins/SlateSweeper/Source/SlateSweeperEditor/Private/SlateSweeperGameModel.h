@@ -5,16 +5,16 @@
 #include "SlateSweeperTypes.h"
 
 /*
- * The "state" class for our game a bit similar to the "model" of a MVC pattern
+ * In this architecture, the model is similar to the MVC's, but owned by the controller
  * Holds both the data and the functions for modifying the grid
  * If we were to implement backend functionality, we'd do it here
  */
 
-class FSlateSweeperGameState
+class FSlateSweeperGameModel
 {
 public:
 
-	FSlateSweeperGameState(const FSlateSweeperNewGameSettings& InGameSettings);
+	FSlateSweeperGameModel(const FSlateSweeperNewGameSettings& InGameSettings);
 
 	ESlateSweeperCellRevealOutcome RevealCell(int32 CellIndex);
 

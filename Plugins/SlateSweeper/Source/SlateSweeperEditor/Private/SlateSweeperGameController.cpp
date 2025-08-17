@@ -1,31 +1,31 @@
 ﻿// This is a technical test from Eugenio Del Vecchio for Geotech, please do not share.
 
 #include "SlateSweeperGameController.h"
-#include "SlateSweeperGameState.h"
-#include "Widgets/SSlateSweeperMinefieldView.h"
+#include "SlateSweeperGameModel.h"
+#include "Widgets/SSlateSweeperGameView.h"
 
 
 FSlateSweeperGameController::FSlateSweeperGameController(const FSlateSweeperNewGameSettings& InGameSettings)
-	: GameState(MakeShared<FSlateSweeperGameState>(InGameSettings))
+	: GameModel(MakeShared<FSlateSweeperGameModel>(InGameSettings))
 {
 }
 
 void FSlateSweeperGameController::HandleOnCellPressed(int32 CellIndex)
 {
-	if (GameState->RevealCell(CellIndex) == ESlateSweeperCellRevealOutcome::HitMine)
+	if (GameModel->RevealCell(CellIndex) == ESlateSweeperCellRevealOutcome::HitMine)
 	{
-		GameState->RevealAllCells();
+		GameModel->RevealAllCells();
 		FMessageDialog::Open(EAppMsgType::Ok, FText::FromString(TEXT("You hit a mine! Game over.")));
 	}
 	
-	GameView->Update(GameState->GetGridData());
+	GameView->Update(GameModel->GetGridData());
 }
 
-TWeakPtr<SSlateSweeperMinefieldView> FSlateSweeperGameController::GetOrCreateGameView()
+TWeakPtr<SSlateSweeperGameView> FSlateSweeperGameController::GetOrCreateGameView()
 {
 	if (!GameView.IsValid())
 	{
-		GameView = SNew(SSlateSweeperMinefieldView).ViewData(GameState->GetGridData());
+		GameView = SNew(SSlateSweeperGameView).ViewData(GameModel->GetGridData());
 
 		// Lengthy registration but ensures delegate safety 
 		GameView->RegisterOnCellPressed
@@ -41,7 +41,7 @@ TWeakPtr<SSlateSweeperMinefieldView> FSlateSweeperGameController::GetOrCreateGam
 	return GameView;
 }
 
-TWeakPtr<FSlateSweeperGameState> FSlateSweeperGameController::GetSlateSweeperGameState() const
+TWeakPtr<FSlateSweeperGameModel> FSlateSweeperGameController::GetSlateSweeperGameModel() const
 {
-	return GameState;
+	return GameModel;
 }
