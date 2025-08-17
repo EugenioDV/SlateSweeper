@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
+#include "SlateSweeperTypes.h"
 
 class FToolBarBuilder;
 class FMenuBuilder;
@@ -38,7 +39,7 @@ public:
 	static void OpenSlateSweeperWindow();
 
 	TSharedRef<class SDockTab> SpawnSlateSweeperWindow(const class FSpawnTabArgs& SpawnTabArgs);
-	TWeakPtr<class FSlateSweeperGameController,  ESPMode::ThreadSafe> StartNewGame(uint8 GameMineGridWidth, uint8 GameMineGridHeight, int32 GameTotalMines);
+	TWeakPtr<class FSlateSweeperGameController,  ESPMode::ThreadSafe> StartNewGame(const FSlateSweeperNewGameSettings& GameSettings);
 	
 	TWeakPtr<class FSlateSweeperGameController,  ESPMode::ThreadSafe> GetCurrentGameController();
 private:

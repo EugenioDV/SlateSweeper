@@ -2,6 +2,9 @@
 
 #pragma once
 
+#include "CoreMinimal.h"
+#include "SlateSweeperTypes.generated.h"
+
 /*
  * Shared data definitions for SlateSweeper.
  *
@@ -40,4 +43,14 @@ struct FSlateSweeperGridData
 
 	uint8 GridWidth = 0;
 	uint8 GridHeight = 0;
+};
+
+// Want to start a new game? This is what your request data will look like
+USTRUCT()
+struct FSlateSweeperNewGameSettings
+{
+	GENERATED_BODY()
+	UPROPERTY() uint8 GridWidth = 20;
+	UPROPERTY() uint8 GridHeight = 20;
+	UPROPERTY() int32 TotalMines = 50;
 };

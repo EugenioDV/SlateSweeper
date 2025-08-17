@@ -14,7 +14,7 @@ class FSlateSweeperGameState
 {
 public:
 
-	FSlateSweeperGameState(uint8 InMineGridWidth, uint8 InMineGridHeight, int32 InTotalMines);
+	FSlateSweeperGameState(const FSlateSweeperNewGameSettings& InGameSettings);
 
 	ESlateSweeperCellRevealOutcome RevealCell(int32 CellIndex);
 

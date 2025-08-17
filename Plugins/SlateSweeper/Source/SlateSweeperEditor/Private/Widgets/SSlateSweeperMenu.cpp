@@ -58,15 +58,15 @@ void SSlateSweeperMenu::Construct(const FArguments& InArgs)
 					SNew(SSpinBox<uint8>)
 					.MinValue(GeneralSettings->MinGridWidth)
 					.MaxValue(GeneralSettings->MaxGridWidth)
-					.Value(GameSettings->GridWidth)
+					.Value(GameSettings->CurrentGameSettings.GridWidth)
 					.OnValueCommitted_Lambda([GameSettings, GeneralSettings](uint8 NewValue, ETextCommit::Type CommitType)
 					{
-						GameSettings->GridWidth = NewValue;
-						GameSettings->TotalMines = FMath::Clamp
+						GameSettings->CurrentGameSettings.GridWidth = NewValue;
+						GameSettings->CurrentGameSettings.TotalMines = FMath::Clamp
 						(
-							GameSettings->TotalMines,
-							GeneralSettings->GetMinAllowedMines(GameSettings->GridWidth, GameSettings->GridHeight),
-							GeneralSettings->GetMaxAllowedMines(GameSettings->GridWidth, GameSettings->GridHeight)
+							GameSettings->CurrentGameSettings.TotalMines,
+							GeneralSettings->GetMinAllowedMines(GameSettings->CurrentGameSettings.GridWidth, GameSettings->CurrentGameSettings.GridHeight),
+							GeneralSettings->GetMaxAllowedMines(GameSettings->CurrentGameSettings.GridWidth, GameSettings->CurrentGameSettings.GridHeight)
 						);
 						GameSettings->SaveConfig();
 					})
@@ -84,15 +84,15 @@ void SSlateSweeperMenu::Construct(const FArguments& InArgs)
 					SNew(SSpinBox<uint8>)
 					.MinValue(GeneralSettings->MinGridHeight)
 					.MaxValue(GeneralSettings->MaxGridHeight)
-					.Value(GameSettings->GridHeight)
+					.Value(GameSettings->CurrentGameSettings.GridHeight)
 					.OnValueCommitted_Lambda([GameSettings, GeneralSettings](uint8 NewValue, ETextCommit::Type CommitType)
 					{
-						GameSettings->GridHeight = NewValue;
-						GameSettings->TotalMines = FMath::Clamp
+						GameSettings->CurrentGameSettings.GridHeight = NewValue;
+						GameSettings->CurrentGameSettings.TotalMines = FMath::Clamp
 						(
-							GameSettings->TotalMines,
-							GeneralSettings->GetMinAllowedMines(GameSettings->GridWidth, GameSettings->GridHeight),
-							GeneralSettings->GetMaxAllowedMines(GameSettings->GridWidth, GameSettings->GridHeight)
+							GameSettings->CurrentGameSettings.TotalMines,
+							GeneralSettings->GetMinAllowedMines(GameSettings->CurrentGameSettings.GridWidth, GameSettings->CurrentGameSettings.GridHeight),
+							GeneralSettings->GetMaxAllowedMines(GameSettings->CurrentGameSettings.GridWidth, GameSettings->CurrentGameSettings.GridHeight)
 						);
 						GameSettings->SaveConfig();
 					})
@@ -111,23 +111,23 @@ void SSlateSweeperMenu::Construct(const FArguments& InArgs)
 				SNew(SSpinBox<int32>)
 				.MinValue_Lambda([GameSettings, GeneralSettings]
 				{
-					return GeneralSettings->GetMinAllowedMines(GameSettings->GridWidth, GameSettings->GridHeight);
+					return GeneralSettings->GetMinAllowedMines(GameSettings->CurrentGameSettings.GridWidth, GameSettings->CurrentGameSettings.GridHeight);
 				})
 				.MaxValue_Lambda([GameSettings, GeneralSettings]
 				{
-					return GeneralSettings->GetMaxAllowedMines(GameSettings->GridWidth, GameSettings->GridHeight);
+					return GeneralSettings->GetMaxAllowedMines(GameSettings->CurrentGameSettings.GridWidth, GameSettings->CurrentGameSettings.GridHeight);
 				})
 				.Value_Lambda([GameSettings]
 				{
-					return GameSettings->TotalMines;
+					return GameSettings->CurrentGameSettings.TotalMines;
 				})
 				.OnValueChanged_Lambda([GameSettings](int32 NewValue)
 				{
-					GameSettings->TotalMines = NewValue;
+					GameSettings->CurrentGameSettings.TotalMines = NewValue;
 				})
 				.OnValueCommitted_Lambda([GameSettings](int32 NewValue, ETextCommit::Type CommitType)
 				{
-					GameSettings->TotalMines = NewValue;
+					GameSettings->CurrentGameSettings.TotalMines = NewValue;
 					GameSettings->SaveConfig();
 				})
 			)
@@ -140,7 +140,7 @@ void SSlateSweeperMenu::Construct(const FArguments& InArgs)
 			.Text(LOCTEXT("StartNewGame", "Start New Game"))
 			.OnClicked_Lambda([this, GameSettings]
 			{
-				OnStartGameClicked.ExecuteIfBound(GameSettings->GridWidth, GameSettings->GridHeight, GameSettings->TotalMines);
+				OnStartGameClicked.ExecuteIfBound(GameSettings->CurrentGameSettings);
 				return FReply::Handled();
 			})
 		]

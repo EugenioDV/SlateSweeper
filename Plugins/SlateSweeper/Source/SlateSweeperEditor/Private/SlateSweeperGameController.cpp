@@ -7,8 +7,8 @@
 
 
 
-FSlateSweeperGameController::FSlateSweeperGameController(uint8 InMineGridWidth, uint8 InMineGridHeight, int32 InTotalMines)
-	: GameState(MakeShared<FSlateSweeperGameState>(InMineGridWidth, InMineGridHeight, InTotalMines))
+FSlateSweeperGameController::FSlateSweeperGameController(const FSlateSweeperNewGameSettings& InGameSettings)
+	: GameState(MakeShared<FSlateSweeperGameState>(InGameSettings))
 {
 }
 

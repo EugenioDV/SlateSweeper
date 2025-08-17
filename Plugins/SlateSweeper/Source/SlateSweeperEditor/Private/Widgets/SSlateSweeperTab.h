@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "SlateSweeperTypes.h"
 #include "Widgets/Docking/SDockTab.h"
 
 /*
@@ -29,5 +30,5 @@ private:
 	// The "slot" for the game view
  	TSharedPtr<SBox> MinefieldContainer;
 	
-	void OnStartNewGamePressed(uint8 GridWidth, uint8 GridHeight, int32 TotalMines);
+	void OnStartNewGamePressed(const FSlateSweeperNewGameSettings& GameSettings);
 };

@@ -1,11 +1,13 @@
 ﻿// This is a technical test from Eugenio Del Vecchio for Geotech, please do not share.
 
 #pragma once
+#include "Widgets/SCompoundWidget.h"
+#include "SlateSweeperTypes.h"
 
 class SSlateSweeperMenu : public SCompoundWidget
 {
 public:
-	DECLARE_DELEGATE_ThreeParams(FOnStartGameClicked, uint8 /*GridWidth*/, uint8 /*GridHeight*/, int32 /*NumMines*/);
+	DECLARE_DELEGATE_OneParam(FOnStartGameClicked, const FSlateSweeperNewGameSettings& /*New Game Settings*/);
 	
 	SLATE_BEGIN_ARGS(SSlateSweeperMenu)
 	{}

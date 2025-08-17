@@ -3,9 +3,12 @@
 #include "SlateSweeperGameState.h"
 #include "SlateSweeperEditor.h"
 
-/* Minesweeper helper functions START */
+/* Minesweeper helper functions START
 
-// these functions aren't strongly bound to the module and could very well be in their own class, but there is no need
+/*
+ * These functions aren't strongly bound to the module and could very well be in their own class/math library
+ * Basic types allow for more abstraction, but they could very well just take the GridData struct
+ */
 
 void AllocateMines(TBitArray<>& OutMineCells, int32 TotalMines, int32 TotalCells)
 {
@@ -156,19 +159,19 @@ void FloodRevealCells(int32 CellIndex, uint8 GridWidth, uint8 GridHeight, const 
 
 /* Minesweeper helper functions END */
 
-FSlateSweeperGameState::FSlateSweeperGameState(uint8 InMineGridWidth, uint8 InMineGridHeight, int32 InTotalMines)
+FSlateSweeperGameState::FSlateSweeperGameState(const FSlateSweeperNewGameSettings& InGameSettings)
 	: GridData (MakeShared<FSlateSweeperGridData>())
 {
 	
-	GridData->GridWidth = InMineGridWidth;
-	GridData->GridHeight = InMineGridHeight;
+	GridData->GridWidth = InGameSettings.GridWidth;
+	GridData->GridHeight = InGameSettings.GridHeight;
 	
-	const int32 TotalCells = InMineGridHeight*InMineGridWidth;
+	const int32 TotalCells = InGameSettings.GridWidth*InGameSettings.GridHeight;
 	
 	GridData->RevealedCells.Init(false, TotalCells);
 	
-	AllocateMines(GridData->MineCells, InTotalMines, TotalCells);
-	ComputeMineNeighbourCounts(GridData->CellNeighbourCounts, GridData->MineCells, InMineGridWidth, InMineGridHeight);
+	AllocateMines(GridData->MineCells, InGameSettings.TotalMines, TotalCells);
+	ComputeMineNeighbourCounts(GridData->CellNeighbourCounts, GridData->MineCells, GridData->GridWidth, GridData->GridHeight);
 }
 
 ESlateSweeperCellRevealOutcome FSlateSweeperGameState::RevealCell(int32 CellIndex)

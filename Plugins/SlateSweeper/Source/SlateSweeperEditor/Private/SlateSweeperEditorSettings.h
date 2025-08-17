@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
+#include "SlateSweeperTypes.h"
 #include "SlateSweeperEditorSettings.generated.h"
 
 /*
@@ -17,9 +18,7 @@ class USlateSweeperGameSettings : public UDeveloperSettings
 {
 	GENERATED_BODY()
 public:
-	UPROPERTY(config) uint8 GridWidth = 20;
-	UPROPERTY(config) uint8 GridHeight = 20;
-	UPROPERTY(config) int32 TotalMines = 50;
+	UPROPERTY(config) FSlateSweeperNewGameSettings CurrentGameSettings;
 };
 
 

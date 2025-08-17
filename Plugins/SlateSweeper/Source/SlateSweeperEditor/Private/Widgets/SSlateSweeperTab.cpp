@@ -1,7 +1,6 @@
 ﻿// This is a technical test from Eugenio Del Vecchio for Geotech, please do not share.
 
 #include "SSlateSweeperTab.h"
-
 #include "SlateSweeperEditor.h"
 #include "SlateSweeperGameController.h"
 #include "SSlateSweeperMenu.h"
@@ -41,11 +40,11 @@ void SSlateSweeperTab::Construct(const FArguments& InArgs)
 	}
 }
 
-void SSlateSweeperTab::OnStartNewGamePressed(uint8 GridWidth, uint8 GridHeight, int32 TotalMines)
+void SSlateSweeperTab::OnStartNewGamePressed(const FSlateSweeperNewGameSettings& GameSettings)
 {
 	FSlateSweeperEditor& SlateSweeperModule =  FModuleManager::LoadModuleChecked<FSlateSweeperEditor>("SlateSweeperEditor");
 	
-	CurrentGame = SlateSweeperModule.StartNewGame(GridWidth, GridHeight, TotalMines);
+	CurrentGame = SlateSweeperModule.StartNewGame(GameSettings);
 	
 	if (!CurrentGame.IsValid())
 	{

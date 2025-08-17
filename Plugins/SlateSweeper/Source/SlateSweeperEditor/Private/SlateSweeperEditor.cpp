@@ -66,10 +66,9 @@ TSharedRef<SDockTab> FSlateSweeperEditor::SpawnSlateSweeperWindow(const class FS
 	return SNew(SSlateSweeperTab);
 }
 
-TWeakPtr<FSlateSweeperGameController, ESPMode::ThreadSafe> FSlateSweeperEditor::StartNewGame(uint8 GameMineGridWidth, uint8 GameMineGridHeight,
-	int32 GameTotalMines)
+TWeakPtr<FSlateSweeperGameController, ESPMode::ThreadSafe> FSlateSweeperEditor::StartNewGame(const FSlateSweeperNewGameSettings& GameSettings)
 {
-	CurrentGame = MakeShared<FSlateSweeperGameController>(GameMineGridWidth, GameMineGridHeight, GameTotalMines);
+	CurrentGame = MakeShared<FSlateSweeperGameController>(GameSettings);
 	return CurrentGame.ToWeakPtr();
 }
 
