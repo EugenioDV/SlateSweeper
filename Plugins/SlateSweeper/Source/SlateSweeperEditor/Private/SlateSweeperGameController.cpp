@@ -14,7 +14,12 @@ FSlateSweeperGameController::FSlateSweeperGameController(uint8 InMineGridWidth, 
 
 void FSlateSweeperGameController::HandleOnCellPressed(int32 CellIndex)
 {
-	GameState->RevealCell(CellIndex);
+	if (GameState->RevealCell(CellIndex) == ESlateSweeperCellRevealOutcome::HitMine)
+	{
+		GameState->RevealAllCells();
+		FMessageDialog::Open(EAppMsgType::Ok, FText::FromString(TEXT("You hit a mine! Game over.")));
+	}
+	
 	GameView->Update(GameState->GetGridData());
 }
 

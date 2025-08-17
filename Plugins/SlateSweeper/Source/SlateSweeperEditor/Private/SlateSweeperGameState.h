@@ -16,7 +16,10 @@ public:
 
 	FSlateSweeperGameState(uint8 InMineGridWidth, uint8 InMineGridHeight, int32 InTotalMines);
 
-	void RevealCell(int32 CellIndex);
+	ESlateSweeperCellRevealOutcome RevealCell(int32 CellIndex);
+
+	// Called when the game ends
+	void RevealAllCells() { GridData->RevealedCells.Init(true, GridData->GridWidth * GridData->GridHeight); } 
 
 	TWeakPtr<const FSlateSweeperGridData> GetGridData() const;
 	

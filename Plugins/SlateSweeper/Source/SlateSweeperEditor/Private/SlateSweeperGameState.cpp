@@ -171,12 +171,12 @@ FSlateSweeperGameState::FSlateSweeperGameState(uint8 InMineGridWidth, uint8 InMi
 	ComputeMineNeighbourCounts(GridData->CellNeighbourCounts, GridData->MineCells, InMineGridWidth, InMineGridHeight);
 }
 
-void FSlateSweeperGameState::RevealCell(int32 CellIndex)
+ESlateSweeperCellRevealOutcome FSlateSweeperGameState::RevealCell(int32 CellIndex)
 {
 	if (!GridData->RevealedCells.IsValidIndex(CellIndex) || GridData->RevealedCells[CellIndex])
 	{
 		UE_LOG(LogSlateSweeper, Error, TEXT("Failed to reveal cell. Cell index invalid or already revealed: %d"), CellIndex);
-		return;
+		return ESlateSweeperCellRevealOutcome::Invalid;
 	}
 
 	// Reveal the initial cell
@@ -185,16 +185,17 @@ void FSlateSweeperGameState::RevealCell(int32 CellIndex)
 	// If this cell has neighbours, no need to do anything else
 	if (GridData->CellNeighbourCounts[CellIndex] > 0)
 	{
-		return;
+		return ESlateSweeperCellRevealOutcome::RevealedSafe;
 	}
-
-	// For this project scope, revealing all cells is enough to end the game when the user picks a mined cell
+	
 	if (GridData->MineCells[CellIndex])
 	{
-		GridData->RevealedCells.Init(true, GridData->GridWidth * GridData->GridHeight);
+		return ESlateSweeperCellRevealOutcome::HitMine;
 	}
-
+	
 	FloodRevealCells(CellIndex, GridData->GridWidth, GridData->GridHeight, GridData->CellNeighbourCounts, GridData->RevealedCells);
+	
+	return ESlateSweeperCellRevealOutcome::FloodReveal;
 }
 
 TWeakPtr<const FSlateSweeperGridData> FSlateSweeperGameState::GetGridData() const
