@@ -31,6 +31,7 @@ The most intense days were definitely the ones in the middle, but once I knew al
 ## Core architecture breakdown
 
 ### High level
+
 The project is intentionally small: A **Model** (`FSlateSweeperGameModel`) that owns the minefield and rules, a **Controller** (`FSlateSweeperGameController`) that translates user intent into state mutations, and a **View** (`SSlateSweeperGameView`) that renders and relays input.
 
 The editor tab (`SSlateSweeperTab`) simply hosts the View and settings menu (`SSlateSweeperMenu`); the game logic doesn’t depend on the tab’s lifetime. This way you can open/close tab and potentially render the view anywhere.
@@ -41,11 +42,38 @@ Some helper files tie things together:
 * `SlateSweeperTypes.h` is our key player in ensuring everyone agrees on how data looks like
 * `SlateSweeperEditorSettings.h` is a quality-of-life class that contains the game setup criteria (used in the menu), while also storing settings data which made testing much faster.
 
+### Data and compute/memory costs
+
+The grid state is centralized in `FSlateSweeperGridData`, which stores:
+
+* `RevealedCells` → a `TBitArray<>` marking which tiles are visible.
+
+* `CellNeighbourCounts` → a `TArray<uint8>` representing the mine count around each cell. Cells without neighbours are still present as array elements to keep access at O(1).
+
+* `MineCells` → a `TBitArray<>` marking mine positions.
+
+* `GridWidth` / `GridHeight` → dimensions of the current session.
+
+This struct acts as the immutable “truth” the View renders from, while the `Model` is responsible for mutating it safely.
+
+The grid initialization is done at `model` construction which calls `AllocateMines`, `ComputeMineNeighbourCounts`.
+
+While this creates more data than needed (an array element in every array for every cell) it keeps code simple and operations trivial.
+
+For reference, a 255x255 grid will take ~81kb, counting 65,025 cells. The `View` is orders of magnitude heavier, so we'd start optimisation there!
+
 ### Event flow
 
+**Starting a game:**
+* Get `FSlateSweeperEditor` (module)
+* Call `StartNewGame(const FSlateSweeperNewGameSettings& GameSettings)`
+* The module spawns a controller which creates a model which creates the data
+* Grab a reference to the view from the controller (which will spawn the view if doesn't exist yet)
+
+**During game:**
 * View raises `OnCellPressed(int32 Index)`
-* Controller validates, mutates State, and triggers a **single redraw**.
-* View renders from Data only.
+* Controller calls State, which responds with the result, and controller triggers a **single view redraw**.
+* View renders from data only.
 
 This structure keeps the project size tiny, ready to future extension without paying for them now.
 For example, the view could potentially switch between different games, even resizing itself, as it treats every state as an immutable source of truth.
@@ -77,15 +105,13 @@ Two examples of how I interacted with AI:
 
 In the final stages, my use of AI was very limited. The main issue is accountability: AI can act like a senior developer but does not grow like a junior. Its mistakes are often subtle and repetitive, hidden behind confident explanations. When this happens, debugging becomes time-consuming.
 
-That said, having a second perspective, even if not human, helped me a lot in this solo endeavour.
+All in all, having a second perspective helped me a lot in this solo endeavour.
 
 ---
 
 ## Closing
 
-This project intentionally optimizes for **clarity, and tiny surface area** over speculative flexibility. It ships a clean baseline and leaves obvious seams for future growth without front-loading that cost.
-
-That being said, if I would do it again, I would probably change a lot of things, but it's easy to say in hindsight.
+This project intentionally optimizes for **clarity, and tiny surface area** over speculative flexibility. If I would do it again, I would probably change a lot of things, but it's easy to say in hindsight.
 
 Last but not least, a sincere thank you to the reviewers. I approached this test with genuine dedication, and I simply hope it can be evaluated with fairness.
 
