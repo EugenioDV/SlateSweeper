@@ -103,8 +103,9 @@ I used AI mostly in three ways:
 
 Two examples of how I interacted with AI:
 
-* [Architecture-focused discussion](https://chatgpt.com/share/68a1ed98-3640-800f-93f1-038989e078a5)
-* [Code-and-fix focused discussion](https://chatgpt.com/share/68a1edc7-569c-800f-9a92-4e1d132b878c)
+* [Architecture-focused discussion](https://chatgpt.com/share/68a1ed98-3640-800f-93f1-038989e078a5) (walk & talk turned into pragmatic schematics/suggestions)
+* [Code-and-fix focused discussion](https://chatgpt.com/share/68a1edc7-569c-800f-9a92-4e1d132b878c) (predictable tasks, or "let's give AI a shot" cases)
+* If I didn't like the output, I just ignored it and moved on.
 
 In the final stages, my use of AI was very limited. The main issue is accountability: AI can act like a senior developer but does not grow like a junior. Its mistakes are often subtle and repetitive, hidden behind confident explanations. When this happens, debugging becomes time-consuming.
 
