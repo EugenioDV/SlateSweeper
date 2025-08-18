@@ -91,12 +91,15 @@ That being said, I worked in companies that used `size_t` and so forth, and was 
 
 ---
 
-## AI is fantastic when it works, frustrating when it doesn't, dangerous when it pretends.
+## AI usage
 
-I used AI mostly in two ways:
+### AI is fantastic when it works, frustrating when it doesn't, dangerous when it pretends.
+
+I used AI mostly in three ways:
 
 * A support tool in the early stages, mainly to accelerate routine tasks and keep momentum while aiming for a working prototype. For example, I offloaded the first draft of neighbor computation and cascade reveal logic. I later rewrote and polished all code.
 * Brainstorming: explore possible class names, patterns, and best practices, which I then validated through my own research.
+* Any routine task that has a clear, predictable result (e.g. creating a bunch of developer settings, tho I still had to remove the _MODULE_API_ macros as we're not exposing anything for now)
 
 Two examples of how I interacted with AI:
 
