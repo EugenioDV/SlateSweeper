@@ -93,7 +93,7 @@ That being said, I worked in companies that used `size_t` and so forth, and was 
 
 ## AI usage
 
-### AI is fantastic when it works, frustrating when it doesn't, dangerous when it pretends.
+### _AI is fantastic when it works, frustrating when it fails, dangerous when it pretends._
 
 I used AI mostly in three ways:
 
