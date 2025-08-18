@@ -83,7 +83,7 @@ For example, the view could potentially switch between different games, even res
 ## To `int` or not to `int`
 
 A couple words on Unreal and the type `int`. Some years ago, I used to go for the perfect type at every step of the way.
-Today, my opinion on the matter is that many times in Unreal you’re just masking implicit conversion which is a worse tradeoff than using the perfect type.
+Today, my opinion on the matter is that many times in Unreal you’re just masking implicit conversion which is the worse tradeoff.
 
 **`int32` is the Unreal lingua franca.** It minimizes friction with engine APIs and implicit conversions. Sometimes it likes `uint8`.
 
